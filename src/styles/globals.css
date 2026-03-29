@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* AI Avatar running animation */
+@keyframes avatarRun {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(4px) rotate(3deg); }
+  50% { transform: translateX(0) rotate(0deg); }
+  75% { transform: translateX(-4px) rotate(-3deg); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes avatarBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.avatar-running {
+  animation: avatarRun 0.4s ease-in-out infinite;
+}
+
+.avatar-speaking {
+  animation: avatarBounce 0.5s ease-in-out infinite;
+}
+
+/* Score change animation */
+@keyframes scoreUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-20px); opacity: 0; }
+}
+
+.score-increase {
+  animation: scoreUp 1s ease-out forwards;
+}
