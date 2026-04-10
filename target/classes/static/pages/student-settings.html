@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenMind - Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/css/tokens.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+<div class="page-shell centered">
+    <div class="container" style="max-width: 480px;">
+        <div class="card stack">
+            <!-- Profile -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:8px 0 4px;">
+                <div id="profileAvatar" style="width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff;letter-spacing:-1px;box-shadow:0 4px 16px rgba(0,0,0,.15);"></div>
+                <div style="text-align:center;">
+                    <div id="profileName" style="font-size:20px;font-weight:700;color:var(--text-1);letter-spacing:-0.02em;"></div>
+                    <div id="profileEmail" style="font-size:13px;color:var(--text-2);margin-top:3px;"></div>
+                </div>
+                <span id="profileRoleBadge" class="status-chip"></span>
+            </div>
+            <hr style="border:none;border-top:1px solid var(--border);margin:0;">
+            <!-- Personality (student only) -->
+            <div id="personalitySection">
+                <form id="personalityForm" class="stack">
+                    <div class="form-label" style="margin-bottom:4px;">Personality Type</div>
+                    <label><input type="radio" name="personality" value="E"> E — Extrovert</label>
+                    <label><input type="radio" name="personality" value="I"> I — Introvert</label>
+                    <button class="btn" type="submit">&#x1F4BE; Save Changes</button>
+                </form>
+            </div>
+            <div id="message"></div>
+            <hr style="border:none;border-top:1px solid var(--border);margin:0;">
+            <div class="row" style="justify-content:space-between;">
+                <button class="btn btn-outline" type="button" id="backButton">&#x2B05;&#xFE0F; Back</button>
+                <button class="btn btn-outline" type="button" onclick="logout()" style="color:var(--red-600);border-color:#fecaca;">&#x1F44B; Logout</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/js/common/storage.js"></script>
+<script src="../assets/js/common/api.js"></script>
+<script src="../assets/js/common/auth.js"></script>
+<script src="../assets/js/common/utils.js"></script>
+<script src="../assets/js/pages/student-settings.js"></script>
+</body>
+</html>
