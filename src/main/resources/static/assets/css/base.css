@@ -1,0 +1,165 @@
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, .15), transparent),
+        radial-gradient(ellipse 60% 50% at 80% 50%, rgba(59, 130, 246, .08), transparent),
+        radial-gradient(ellipse 50% 60% at 10% 80%, rgba(139, 92, 246, .06), transparent),
+        linear-gradient(160deg, #e8eeff 0%, #f0f4ff 35%, #f8f6ff 100%);
+    background-attachment: fixed;
+    color: var(--text-1);
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* ── Typography ── */
+h1, h2, h3 { margin: 0; }
+h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    padding-left: 14px;
+    border-left: 3px solid var(--blue-500);
+}
+
+/* ── Page Header (gradient top bar) ── */
+.page-header {
+    background: linear-gradient(135deg, #1a1a4e 0%, var(--blue-800) 30%, var(--blue-600) 70%, var(--violet-600) 100%);
+    color: var(--text-inv);
+    padding: 28px 0;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 24px rgba(30, 64, 175, .20), 0 1px 0 rgba(255, 255, 255, .05) inset;
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(139, 92, 246, .12) 0%, rgba(59, 130, 246, .06) 40%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.page-header::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -5%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(96, 165, 250, .10) 0%, transparent 60%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.page-header h1 {
+    color: var(--text-inv);
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.page-header-sub {
+    color: rgba(255, 255, 255, .75);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* ── Teacher header variant (purple-blue) ── */
+.page-header-teacher {
+    background: linear-gradient(135deg, #1e1145 0%, #312e81 30%, var(--violet-600) 70%, var(--blue-500) 100%);
+}
+
+/* ── Student header variant (teal-blue) ── */
+.page-header-student {
+    background: linear-gradient(135deg, #042f2e 0%, var(--teal-600) 30%, var(--blue-500) 70%, var(--blue-400) 100%);
+}
+
+/* ── Page Body (below header) ── */
+.page-body {
+    padding: 0 0 40px;
+}
+
+/* ── Page Shell (for centered pages without header) ── */
+.page-shell {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 32px 0;
+}
+
+.page-shell.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Container ── */
+.container {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+/* ── Stack / Row ── */
+.stack {
+    display: grid;
+    gap: 16px;
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ── Login Brand ── */
+.login-brand {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.login-logo {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 14px;
+    background: linear-gradient(135deg, var(--blue-600), var(--violet-500));
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-inv);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, .30), 0 0 0 1px rgba(255, 255, 255, .15) inset;
+    animation: logo-float 6s ease-in-out infinite;
+}
+
+.login-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-1);
+    letter-spacing: -0.01em;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: var(--text-2);
+    margin-top: 4px;
+}
+
+/* ── Message ── */
+#message {
+    font-size: 14px;
+    font-weight: 500;
+    min-height: 20px;
+}

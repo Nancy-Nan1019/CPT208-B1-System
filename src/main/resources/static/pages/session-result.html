@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenMind - Result</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/css/tokens.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+<div class="page-header">
+    <div class="container">
+        <div class="row" style="justify-content:space-between;align-items:center;">
+            <div>
+                <h1>Session Result</h1>
+                <div class="page-header-sub" id="resultTopic"></div>
+            </div>
+            <div class="row">
+                <button id="exportCsvButton" class="btn btn-glass" type="button">&#x1F4E5; Export CSV</button>
+                <button id="backButton" class="btn btn-glass" type="button">&#x2B05;&#xFE0F; Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-body">
+    <div class="container stack">
+        <div class="card stack" id="resultSummary" style="display:none;">
+            <h2>Session Summary</h2>
+            <div id="resultSummaryContent" class="stack"></div>
+        </div>
+        <div class="card stack">
+            <h2>Overall Ranking</h2>
+            <div id="resultRanking" class="stack"></div>
+        </div>
+        <div class="card stack">
+            <h2>Group Details</h2>
+            <div id="resultGroups" class="stack"></div>
+        </div>
+        <div id="message"></div>
+    </div>
+</div>
+<script src="../assets/js/common/storage.js"></script>
+<script src="../assets/js/common/api.js"></script>
+<script src="../assets/js/common/auth.js"></script>
+<script src="../assets/js/common/utils.js"></script>
+<script src="../assets/js/pages/session-result.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenMind - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/css/tokens.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+<div class="page-header page-header-teacher">
+    <div class="container">
+        <div class="row" style="justify-content:space-between;align-items:center;">
+            <div>
+                <h1>Teacher Dashboard</h1>
+                <div class="page-header-sub">Welcome, <span id="teacherName"></span></div>
+            </div>
+            <div class="row">
+                <button class="btn btn-glass" type="button" onclick="window.location.href='./student-settings.html?from=teacher-dashboard'">&#x2699;&#xFE0F; Settings</button>
+                <button class="btn btn-glass" onclick="logout()">&#x1F44B; Logout</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-body">
+    <div class="container stack">
+        <div class="card stack">
+            <h2>Create Session</h2>
+            <form id="sessionForm" class="stack">
+                <div class="form-group">
+                    <label class="form-label" for="topic">Discussion Topic</label>
+                    <input id="topic" class="input" placeholder="e.g. Should AI replace teachers?" required>
+                </div>
+                <div class="row" style="gap:16px;">
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label" for="durationMinutes">Duration (min)</label>
+                        <input id="durationMinutes" class="input" type="number" min="1" max="120" value="15">
+                        <span class="form-hint">1 ~ 120 minutes</span>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label" for="groupSize">Group Size</label>
+                        <input id="groupSize" class="input" type="number" min="2" max="6" value="4">
+                        <span class="form-hint">2 ~ 6 students per group</span>
+                    </div>
+                </div>
+                <button id="createSessionButton" class="btn" type="submit">&#x2795; Create Session</button>
+            </form>
+            <div id="message"></div>
+        </div>
+        <div class="card stack">
+            <h2>Session List</h2>
+            <div id="sessionList" class="stack"></div>
+        </div>
+    </div>
+</div>
+<script src="../assets/js/common/storage.js"></script>
+<script src="../assets/js/common/api.js"></script>
+<script src="../assets/js/common/auth.js"></script>
+<script src="../assets/js/common/utils.js"></script>
+<script src="../assets/js/pages/teacher-dashboard.js"></script>
+</body>
+</html>

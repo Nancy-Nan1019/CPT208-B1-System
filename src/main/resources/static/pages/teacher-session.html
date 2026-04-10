@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenMind - Session Monitor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/css/tokens.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+<div class="page-header page-header-teacher">
+    <div class="container">
+        <div class="row" style="justify-content:space-between;align-items:center;">
+            <div>
+                <h1>Session Monitor</h1>
+                <div class="page-header-sub" id="sessionMeta"></div>
+            </div>
+            <div class="row">
+                <button id="exportCsvButton" class="btn btn-glass" type="button">&#x1F4E5; Export CSV</button>
+                <button class="btn btn-glass" type="button" onclick="window.location.href='./teacher-dashboard.html'">&#x2B05;&#xFE0F; Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="notificationOverlay" class="notification-overlay" style="display:none;">
+    <div class="notification-box" id="notificationBox">
+        <div id="notificationText"></div>
+    </div>
+</div>
+<div class="page-body">
+    <div class="container stack">
+        <div id="timerBar" class="card" style="display:none;">
+            <div class="row" style="justify-content:space-between;font-size:14px;margin-bottom:4px;">
+                <span>Topic: <strong id="sessionTopic"></strong></span>
+                <span id="timerText" style="font-weight:600;color:var(--blue-600);">--:--</span>
+            </div>
+            <div class="progress" style="height:8px;">
+                <div id="timerProgress" class="progress-bar" style="width:0%;transition:width 1s linear;"></div>
+            </div>
+        </div>
+        <div class="card stack">
+            <h2>Realtime Overview</h2>
+            <div id="overviewPanel" class="stack"></div>
+        </div>
+        <div class="card stack">
+            <h2>Alerts</h2>
+            <div id="alertPanel" class="stack"></div>
+        </div>
+        <div class="card stack">
+            <div class="row" style="justify-content:space-between;align-items:center;">
+                <h2>Participation Analytics</h2>
+                <div class="row" style="gap:6px;">
+                    <button id="tabGroup" class="btn btn-outline" type="button" style="padding:4px 14px;font-size:13px;">Group</button>
+                    <button id="tabIndividual" class="btn btn-outline" type="button" style="padding:4px 14px;font-size:13px;">Individual</button>
+                    <button id="tabTimeline" class="btn btn-outline" type="button" style="padding:4px 14px;font-size:13px;">Timeline</button>
+                </div>
+            </div>
+            <div id="analyticsPanel" class="stack"></div>
+        </div>
+        <div class="card stack">
+            <h2>Group Status</h2>
+            <div id="groupStatusPanel" class="stack"></div>
+        </div>
+        <div id="resultSection" style="display:none;" class="stack">
+            <div class="card stack">
+                <h2>Overall Ranking</h2>
+                <div id="resultRanking" class="stack"></div>
+            </div>
+            <div class="card stack">
+                <h2>Group Details</h2>
+                <div id="resultGroups" class="stack"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="../assets/js/common/storage.js"></script>
+<script src="../assets/js/common/api.js"></script>
+<script src="../assets/js/common/auth.js"></script>
+<script src="../assets/js/common/utils.js"></script>
+<script src="../assets/js/common/websocket.js"></script>
+<script src="../assets/js/pages/teacher-session.js"></script>
+</body>
+</html>

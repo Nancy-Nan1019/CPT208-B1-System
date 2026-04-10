@@ -1,0 +1,75 @@
+/* ── Design Tokens ── */
+:root {
+    /* Blue */
+    --blue-50: #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-200: #bfdbfe;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --blue-800: #1e40af;
+    --blue-900: #1e3a8a;
+
+    /* Violet — AI accent */
+    --violet-50: #f5f3ff;
+    --violet-100: #ede9fe;
+    --violet-200: #ddd6fe;
+    --violet-400: #a78bfa;
+    --violet-500: #8b5cf6;
+    --violet-600: #7c3aed;
+
+    /* Teal — student accent */
+    --teal-400: #2dd4bf;
+    --teal-500: #14b8a6;
+    --teal-600: #0d9488;
+
+    /* Surfaces (glass-ready) */
+    --surface: #f0f4ff;
+    --surface-card: rgba(255, 255, 255, .72);
+    --surface-card-solid: #ffffff;
+    --surface-raised: rgba(248, 250, 255, .80);
+    --border: rgba(219, 234, 254, .60);
+    --border-strong: rgba(148, 163, 184, .25);
+    --border-focus: #3b82f6;
+
+    /* Text */
+    --text-1: #0f172a;
+    --text-2: #475569;
+    --text-3: #94a3b8;
+    --text-inv: #ffffff;
+
+    /* Semantic */
+    --green-fg: #166534;
+    --green-bg: #dcfce7;
+    --amber-fg: #92400e;
+    --amber-bg: #fef3c7;
+    --red-500: #ef4444;
+    --red-600: #dc2626;
+
+    /* Radii */
+    --radius-s: 10px;
+    --radius-m: 14px;
+    --radius-l: 18px;
+    --radius-xl: 24px;
+    --radius-pill: 9999px;
+
+    /* Shadows */
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, .04);
+    --shadow-card:
+        0 1px 3px rgba(15, 23, 42, .03),
+        0 8px 24px rgba(37, 99, 235, .06),
+        0 0 0 1px rgba(255, 255, 255, .6) inset;
+    --shadow-hover:
+        0 4px 16px rgba(15, 23, 42, .06),
+        0 20px 48px rgba(37, 99, 235, .10),
+        0 0 0 1px rgba(255, 255, 255, .8) inset;
+    --shadow-float:
+        0 8px 32px rgba(15, 23, 42, .10),
+        0 32px 64px rgba(37, 99, 235, .14);
+
+    /* Transitions */
+    --ease: 200ms ease;
+    --ease-spring: 300ms cubic-bezier(.34, 1.56, .64, 1);
+}

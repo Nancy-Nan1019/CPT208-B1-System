@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenMind - Waiting Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/css/tokens.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+<div class="page-header page-header-student">
+    <div class="container" style="max-width: 720px;">
+        <div class="row" style="justify-content:space-between;align-items:center;">
+            <div>
+                <h1>Waiting Room</h1>
+                <div class="page-header-sub">Welcome, <span id="userName"></span></div>
+            </div>
+            <div class="row">
+                <button id="openHistoryBtn" class="btn btn-glass" type="button">&#x1F4D6; History</button>
+                <button class="btn btn-glass" type="button" onclick="window.location.href='./student-settings.html?from=waiting-room'">&#x2699;&#xFE0F; Settings</button>
+                <button class="btn btn-glass" type="button" onclick="logout()">&#x1F44B; Logout</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-body">
+    <div class="container" style="max-width: 720px;">
+        <div class="card stack">
+            <div style="color:var(--text-2);font-size:15px;">Select a session to join the waiting room, then wait for the teacher to start grouping.</div>
+            <div style="font-weight:600;">Participants: <span id="participantCount">-</span></div>
+            <select id="sessionSelect" class="input"></select>
+            <div id="sessionInfo" class="form-hint" style="display:none;"></div>
+            <button id="joinSessionButton" class="btn" type="button" disabled>&#x1F3C3; Join Waiting Room</button>
+            <div id="message"></div>
+        </div>
+    </div>
+</div>
+<div id="historyOverlay" class="notification-overlay" style="display:none;">
+    <div class="notification-box" style="text-align:left;max-width:520px;padding:28px 28px 20px;max-height:80vh;overflow-y:auto;">
+        <div id="historyHeader" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h2 id="historyTitle" style="margin:0;font-size:18px;">My History</h2>
+            <button id="closeHistoryBtn" class="btn btn-outline" type="button" style="padding:4px 14px;font-size:13px;">Close</button>
+        </div>
+        <div id="historyContent" style="font-size:14px;color:var(--text-2);">Loading...</div>
+    </div>
+</div>
+<script src="../assets/js/common/storage.js"></script>
+<script src="../assets/js/common/api.js"></script>
+<script src="../assets/js/common/auth.js"></script>
+<script src="../assets/js/common/utils.js"></script>
+<script src="../assets/js/common/websocket.js"></script>
+<script src="../assets/js/pages/waiting-room.js"></script>
+</body>
+</html>
