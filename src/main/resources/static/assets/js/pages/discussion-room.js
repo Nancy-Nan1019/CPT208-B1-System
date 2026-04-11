@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let aiGuideBubbleTimer = null;
     let summaryPromptRequested = false;
     let sessionFinished = false;
+    let aiCompanionMood = 'idle';
+    let sessionDurationSeconds = 0;
     var speakingTimeline = [];
     var speakingStartTimes = {};
     var speakCountMap = {};
@@ -37,7 +39,9 @@ document.addEventListener('DOMContentLoaded', function () {
     syncGroupAvatarAssignments(group.members || []);
     renderMembers(group.members || []);
     renderRanking(group.members || []);
+    renderRaceTrack(group.members || []);
     initTimer(group.sessionId);
+    updateAiCompanion('idle', 'Ask for a prompt when the discussion slows down, or keep speaking to energise the room.');
 
     function loadSpeakingLog() {
         var btn = qs('#refreshLogButton');
@@ -198,6 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (sessionFinished) {
             return;
         }
+        updateAiCompanion('guiding', content || 'Fresh guidance is ready for your team.');
         qs('#aiGuideContent').textContent = content;
         qs('#aiGuideBubble').style.display = 'block';
         if (aiGuideBubbleTimer) {
@@ -206,7 +211,31 @@ document.addEventListener('DOMContentLoaded', function () {
         aiGuideBubbleTimer = setTimeout(function () {
             qs('#aiGuideBubble').style.display = 'none';
             aiGuideBubbleTimer = null;
+            if (!sessionFinished) {
+                updateAiCompanion('idle', 'I am hovering nearby if your group needs another nudge.');
+            }
         }, 10000);
+    }
+
+    function updateAiCompanion(state, hint) {
+        aiCompanionMood = state || 'idle';
+        var moodNode = qs('#aiCompanionMood');
+        var hintNode = qs('#aiCompanionHint');
+        var dotNode = qs('#aiStatusDot');
+        var panelNode = document.querySelector('.ai-companion-panel');
+        if (!moodNode || !hintNode || !dotNode || !panelNode) {
+            return;
+        }
+        var labels = {
+            idle: 'Ready to cheer your team on.',
+            listening: 'Listening to the room in real time.',
+            guiding: 'Sharing a new idea spark.',
+            ending: 'Wrapping up and preparing the final takeaway.'
+        };
+        moodNode.textContent = labels[aiCompanionMood] || labels.idle;
+        hintNode.textContent = hint || 'Ask for a prompt when the discussion slows down, or keep speaking to energise the room.';
+        panelNode.setAttribute('data-mood', aiCompanionMood);
+        dotNode.className = 'ai-status-dot ai-status-' + aiCompanionMood;
     }
 
     function createStableSeed() {
@@ -274,6 +303,19 @@ document.addEventListener('DOMContentLoaded', function () {
         return '<span class="' + cls + '" style="width:' + sizePx + 'px;height:' + sizePx + 'px;"><img src="' + avatarSrc + '" alt="avatar"></span>';
     }
 
+    function buildCharacterAvatarHtml(userId, name, personality) {
+        var avatarSrc = getAssignedAvatarSrc(userId, name);
+        var cls = 'member-character';
+        if (personality) {
+            cls += ' personality-' + String(personality).toLowerCase();
+        }
+        return '<div class="' + cls + '">' +
+            '<div class="member-character-glow"></div>' +
+            '<img src="../assets/images/playful/star.svg" alt="" class="member-character-star">' +
+            '<img src="' + avatarSrc + '" alt="avatar" class="member-character-image">' +
+            '</div>';
+    }
+
     var voiceTimerInterval = null;
     var voiceStartTime = null;
 
@@ -305,6 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
         speaking = false;
         stoppingSpeaking = false;
         hideVoiceOverlay();
+        updateAiCompanion('ending', 'The session has ended. You can stay briefly or head to the result page.');
         qs('#sessionStatusText').textContent = 'Ended';
         qs('#timerBar').style.display = 'block';
         qs('#timerText').textContent = 'Ended';
@@ -348,6 +391,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
         speaking = true;
+        updateAiCompanion('listening', 'Nice, the floor is active. Keep your idea clear and concise.');
         showVoiceOverlay();
         try {
             await apiRequest('/students/speaking/start', {
@@ -357,6 +401,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (error) {
             speaking = false;
             hideVoiceOverlay();
+            updateAiCompanion('idle', 'I am still here if you want another prompt.');
             showMessage(qs('#message'), error.message, true);
         }
     }
@@ -374,9 +419,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: JSON.stringify({ sessionId: group.sessionId })
             });
             speaking = false;
+            if (!sessionFinished) {
+                updateAiCompanion('idle', 'Great turn. Another teammate can jump in now.');
+            }
             await Promise.allSettled([refreshGroupState(), loadSpeakingLog()]);
         } catch (error) {
             speaking = false;
+            updateAiCompanion('idle', 'I am still here if you want another prompt.');
             showMessage(qs('#message'), error.message, true);
         } finally {
             stoppingSpeaking = false;
@@ -414,6 +463,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 '</div>';
         }).join('');
         applyStagger(container);
+        renderRaceTrack(members || []);
     }
     function renderTimeline() {
         var container = qs('#speakingTimeline');
@@ -456,6 +506,49 @@ document.addEventListener('DOMContentLoaded', function () {
         }).join('');
         applyStagger(container);
     }
+
+    function renderRaceTrack(members) {
+        var container = qs('#raceTrackBoard');
+        if (!container) {
+            return;
+        }
+        var safeMembers = (members || []).slice().sort(function (a, b) {
+            return (b.score || 0) - (a.score || 0);
+        });
+        var totalDuration = sessionDurationSeconds || 1;
+        if (!safeMembers.length) {
+            container.innerHTML = '<div class="panel-empty">No racers yet.</div>';
+            return;
+        }
+        container.innerHTML = safeMembers.map(function (member) {
+            var score = member.score || 0;
+            var progress = Math.max(2, Math.min(100, Math.round((score / totalDuration) * 1000) / 10));
+            return '<div class="race-row" data-user-id="' + member.userId + '">' +
+                '<div class="race-runner-meta">' +
+                buildAvatarHtml(member.userId, member.name, member.personality, 34) +
+                '<div class="race-runner-copy">' +
+                '<div class="race-runner-name">' + escapeText(member.name || '') + '</div>' +
+                '<div class="race-runner-score">' + score + 's / ' + totalDuration + 's</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="race-lane">' +
+                '<div class="race-lane-line"></div>' +
+                '<div class="race-lane-fill" style="width:' + progress + '%;"></div>' +
+                '<span class="race-flag-marker race-flag-20"><img src="../assets/images/playful/flag.svg" alt=""></span>' +
+                '<span class="race-flag-marker race-flag-40"><img src="../assets/images/playful/flag.svg" alt=""></span>' +
+                '<span class="race-gold-marker"><img src="../assets/images/playful/gold-ingots.svg" alt=""></span>' +
+                '<span class="race-flag-marker race-flag-60"><img src="../assets/images/playful/flag.svg" alt=""></span>' +
+                '<span class="race-flag-marker race-flag-80"><img src="../assets/images/playful/flag.svg" alt=""></span>' +
+                '<span class="race-success-marker"><img src="../assets/images/playful/success.svg" alt=""></span>' +
+                '<span class="race-firework-marker"><img src="../assets/images/playful/firework.svg" alt=""></span>' +
+                '<span class="race-treasure-marker"><img src="../assets/images/playful/treasure-chest.svg" alt=""></span>' +
+                '<div class="race-runner" style="left:calc(' + progress + '% - 22px);">' +
+                buildCharacterAvatarHtml(member.userId, member.name, member.personality) +
+                '</div>' +
+                '</div>' +
+                '</div>';
+        }).join('');
+    }
     function applyStagger(container) {
         if (container.dataset.staggerApplied) return;
         container.dataset.staggerApplied = '1';
@@ -475,11 +568,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function highlightSpeaker(userId, speaking) {
-        const node = document.querySelector('[data-user-id="' + userId + '"]');
-        if (!node) {
+        var nodes = document.querySelectorAll('[data-user-id="' + userId + '"]');
+        if (!nodes.length) {
             return;
         }
-        node.classList.toggle('speaking', speaking);
+        nodes.forEach(function (node) {
+            node.classList.toggle('speaking', speaking);
+        });
+        if (speaking) {
+            updateAiCompanion('listening', 'A teammate is speaking now. Watch the race track update in real time.');
+        } else if (!sessionFinished && !Object.keys(activeSpeakers).some(function (id) { return activeSpeakers[id]; })) {
+            updateAiCompanion('idle', 'The room is calm again. Invite another voice or ask AI for help.');
+        }
     }
 
     function mergeScores(members, ranking) {
@@ -567,6 +667,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
             var start = new Date(sessionData.startedAt);
+            sessionDurationSeconds = Math.max(1, (sessionData.durationMinutes || 0) * 60);
+            renderRaceTrack(group.members || []);
             var expectedEnd = new Date(start.getTime() + (sessionData.durationMinutes * 60000));
             var totalMs = expectedEnd - start;
 

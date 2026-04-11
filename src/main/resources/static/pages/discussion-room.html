@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../assets/css/animations.css">
     <link rel="stylesheet" href="../assets/css/responsive.css">
 </head>
-<body>
+<body class="discussion-room-page">
 <div class="page-header page-header-student">
     <div class="container">
         <div class="header-shell">
@@ -52,6 +52,20 @@
             <div class="progress" style="height:8px;">
                 <div id="timerProgress" class="progress-bar" style="width:0%;transition:width 1s linear;"></div>
             </div>
+        </div>
+        <div class="card race-stage">
+            <div class="card-header">
+                <div class="stack" style="gap:6px;">
+                    <div class="card-kicker">Race Track</div>
+                    <h2>Discussion Race</h2>
+                </div>
+            </div>
+            <div class="race-stage-scene" aria-hidden="true">
+                <img src="../assets/images/playful/rainbow.svg" alt="" class="race-cloud race-cloud-left">
+                <img src="../assets/images/playful/rainbow.svg" alt="" class="race-cloud race-cloud-center">
+                <img src="../assets/images/playful/rainbow.svg" alt="" class="race-cloud race-cloud-right">
+            </div>
+            <div id="raceTrackBoard" class="race-board"></div>
         </div>
         <div class="discussion-main">
             <div class="discussion-panel">
@@ -111,6 +125,22 @@
                             <div class="card-kicker">Assist</div>
                             <h2>AI Support</h2>
                             <div class="card-subtitle">Need momentum? Ask for a fresh prompt that nudges the discussion forward.</div>
+                        </div>
+                    </div>
+                    <div class="ai-companion-panel">
+                        <div class="ai-companion-scene">
+                            <img src="../assets/images/playful/rainbow.svg" alt="" class="ai-scene-rainbow">
+                            <img src="../assets/images/playful/star.svg" alt="" class="ai-scene-star ai-scene-star-left">
+                            <img src="../assets/images/playful/stars.svg" alt="" class="ai-scene-star ai-scene-star-right">
+                            <div class="ai-companion-shell">
+                                <span class="ai-status-dot" id="aiStatusDot"></span>
+                                <img src="../assets/images/icons/robot.svg" alt="AI companion" class="ai-companion-robot">
+                            </div>
+                        </div>
+                        <div class="ai-companion-copy">
+                            <div class="ai-companion-title">OpenMind Buddy</div>
+                            <div id="aiCompanionMood" class="ai-companion-mood">Ready to cheer your team on.</div>
+                            <div id="aiCompanionHint" class="ai-companion-hint">Ask for a prompt when the discussion slows down, or keep speaking to energise the room.</div>
                         </div>
                     </div>
                     <button id="aiGuideButton" class="btn btn-outline ai-guide-btn" type="button">
