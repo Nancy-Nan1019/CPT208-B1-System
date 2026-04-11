@@ -22,17 +22,19 @@ document.addEventListener('DOMContentLoaded', function () {
     var speakingStartTimes = {};
     var speakCountMap = {};
     var avatarPool = [
-        '../assets/images/avatars/avatar-1.svg',
-        '../assets/images/avatars/avatar-2.svg',
-        '../assets/images/avatars/avatar-3.svg',
-        '../assets/images/avatars/avatar-4.svg',
-        '../assets/images/avatars/avatar-5.svg',
-        '../assets/images/avatars/avatar-6.svg'
+        '../assets/images/icons/bat.svg',
+        '../assets/images/icons/bird.svg',
+        '../assets/images/icons/drawing.svg',
+        '../assets/images/icons/fox.svg',
+        '../assets/images/icons/giraffe.svg',
+        '../assets/images/icons/kitty.svg'
     ];
+    var groupAvatarAssignments = {};
 
     qs('#groupName').textContent = group.groupName;
     qs('#sessionIdText').textContent = group.sessionId || '-';
     qs('#sessionStatusText').textContent = 'Waiting';
+    syncGroupAvatarAssignments(group.members || []);
     renderMembers(group.members || []);
     renderRanking(group.members || []);
     initTimer(group.sessionId);
@@ -207,11 +209,45 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 10000);
     }
 
+    function createStableSeed() {
+        return [group.sessionId || '', group.groupId || '', group.groupName || ''].join('|');
+    }
+
+    function hashString(value) {
+        var input = String(value || '');
+        var hash = 0;
+        for (var i = 0; i < input.length; i++) {
+            hash = ((hash << 5) - hash) + input.charCodeAt(i);
+            hash |= 0;
+        }
+        return Math.abs(hash);
+    }
+
+    function syncGroupAvatarAssignments(members) {
+        var normalizedMembers = (members || []).filter(function (member) {
+            return member && member.userId != null;
+        }).slice().sort(function (a, b) {
+            if (a.userId !== b.userId) {
+                return Number(a.userId) - Number(b.userId);
+            }
+            return String(a.name || '').localeCompare(String(b.name || ''));
+        });
+
+        var avatarOrder = avatarPool.slice().sort(function (a, b) {
+            return hashString(createStableSeed() + '|' + a) - hashString(createStableSeed() + '|' + b);
+        });
+
+        groupAvatarAssignments = {};
+        normalizedMembers.forEach(function (member, index) {
+            groupAvatarAssignments[String(member.userId)] = avatarOrder[index % avatarOrder.length];
+        });
+    }
+
     function resolveAvatarIndex(userId, name) {
         if (typeof userId === 'number' && !isNaN(userId)) {
             return Math.abs(userId) % avatarPool.length;
         }
-        
+
         let seed = 0;
         const str = String(name || 'user');
         for (let i = 0; i < str.length; i++) {
@@ -221,9 +257,17 @@ document.addEventListener('DOMContentLoaded', function () {
         return Math.abs(seed) % avatarPool.length;
     }
 
+    function getAssignedAvatarSrc(userId, name) {
+        var key = userId != null ? String(userId) : '';
+        if (key && groupAvatarAssignments[key]) {
+            return groupAvatarAssignments[key];
+        }
+        return avatarPool[resolveAvatarIndex(userId, name)];
+    }
+
     function buildAvatarHtml(userId, name, personality, sizePx) {
-        var avatarSrc = avatarPool[resolveAvatarIndex(userId, name)];
-        var cls = 'avatar-badge';
+        var avatarSrc = getAssignedAvatarSrc(userId, name);
+        var cls = 'avatar-badge avatar-animal';
         if (personality) {
             cls += ' personality-' + String(personality).toLowerCase();
         }
@@ -288,6 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
         group.groupName = latestGroup.groupName;
         group.sessionId = latestGroup.sessionId || group.sessionId;
         qs('#groupName').textContent = group.groupName;
+        syncGroupAvatarAssignments(group.members || []);
         const latestRanking = (group.members || []).slice().sort(function (a, b) {
             return (b.score || 0) - (a.score || 0);
         });
@@ -340,6 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderMembers(members) {
         const container = qs('#memberList');
+        syncGroupAvatarAssignments(members || []);
         const totalScore = members.reduce(function (sum, member) { return sum + (member.score || 0); }, 0) || 1;
         container.innerHTML = members.map(function (member) {
             const score = member.score || 0;
@@ -372,6 +418,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderTimeline() {
         var container = qs('#speakingTimeline');
         if (!container) return;
+        syncGroupAvatarAssignments(group.members || []);
         if (!speakingTimeline.length) {
             container.innerHTML = '<div class="panel-empty">No speaking events yet.</div>';
             qs('#speakingLogMeta').textContent = '';
@@ -400,6 +447,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var medal = index < 3 ? ['1', '2', '3'][index] : (index + 1);
             return '<div class="leaderboard-row">' +
                 '<div class="leaderboard-rank">' + medal + '</div>' +
+                buildAvatarHtml(member.userId, member.name, null, 34) +
                 '<div class="leaderboard-copy">' +
                 '<div class="leaderboard-name">' + escapeText(member.name || '') + '</div>' +
                 '<div class="leaderboard-score">' + (member.score || 0) + ' seconds total</div>' +
@@ -460,6 +508,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 group.groupId = latestGroup.groupId;
                 group.groupName = latestGroup.groupName;
                 group.sessionId = latestGroup.sessionId || group.sessionId;
+                syncGroupAvatarAssignments(group.members || []);
                 var fallbackRanking = (group.members || []).slice().sort(function (a, b) {
                     return (b.score || 0) - (a.score || 0);
                 });

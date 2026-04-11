@@ -411,6 +411,7 @@
 
 .leaderboard-rank {
     width: 28px;
+    flex-shrink: 0;
     text-align: center;
     font-weight: 800;
     color: var(--blue-700);
