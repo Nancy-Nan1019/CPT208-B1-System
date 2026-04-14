@@ -4,13 +4,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         return;
     }
     let realtimeConnected = false;
+    let rejoinReady = false;
+    let manualDiscussionReturn = !!storage.get('manualDiscussionReturn');
     var cachedSessions = [];
+    var sessionMetaMap = {};
     qs('#userName').textContent = user.name;
     var openSessionIds = await loadOpenSessions();
     var rememberedSessionId = storage.get('joinedSessionId');
     if (rememberedSessionId && openSessionIds.indexOf(rememberedSessionId) === -1) {
-        storage.remove('joinedSessionId');
-        rememberedSessionId = null;
+        rememberedSessionId = await resolveRememberedSession(rememberedSessionId);
     }
     if (rememberedSessionId) {
         qs('#sessionSelect').value = String(rememberedSessionId);
@@ -27,6 +29,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     renderSessionPreview();
 
     connectRealtime(rememberedSessionId);
+    if (rememberedSessionId) {
+        await checkGroup(true);
+    }
 
     qs('#openHistoryBtn').addEventListener('click', function () {
         qs('#historyOverlay').style.display = 'flex';
@@ -54,6 +59,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 })
             });
             storage.set('joinedSessionId', sessionId);
+            storage.remove('manualDiscussionReturn');
+            manualDiscussionReturn = false;
+            hideRejoinPanel();
             disconnectDiscussionSocket();
             connectRealtime(sessionId);
             refreshParticipantCount(sessionId);
@@ -62,6 +70,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (error) {
             showMessage(qs('#message'), error.message, true);
         }
+    });
+
+    qs('#rejoinDiscussionButton').addEventListener('click', function () {
+        if (!rejoinReady || !storage.get('currentGroup')) {
+            showMessage(qs('#message'), 'Your discussion room is not ready yet.', true);
+            return;
+        }
+        storage.remove('manualDiscussionReturn');
+        manualDiscussionReturn = false;
+        window.location.href = './discussion-room.html';
     });
 
     const pollTimer = setInterval(async function () {
@@ -89,6 +107,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             const sessionId = storage.get('joinedSessionId');
             if (!sessionId) {
+                hideRejoinPanel();
                 if (!silent) {
                     showMessage(qs('#message'), 'Join a session first', true);
                 }
@@ -97,19 +116,26 @@ document.addEventListener('DOMContentLoaded', async function () {
             const group = await apiRequest('/students/group?sessionId=' + sessionId);
             storage.set('currentGroup', group);
             await acknowledgeGroupReady(sessionId);
-            if (!silent) {
-                showMessage(qs('#message'), realtimeConnected ? 'Group ready notification received' : 'Group result loaded via polling');
+            if (!manualDiscussionReturn) {
+                storage.remove('manualDiscussionReturn');
+                window.location.href = './discussion-room.html';
+                return true;
             }
-            window.location.href = './discussion-room.html';
+            showRejoinPanel(group, sessionId);
+            if (!silent) {
+                showMessage(qs('#message'), realtimeConnected ? 'Group ready. You can rejoin the discussion now.' : 'Group result loaded. You can rejoin the discussion now.');
+            }
             return true;
         } catch (error) {
             const waitingMessage = 'User has not been assigned to a group in this session';
             if (error.message === waitingMessage) {
+                hideRejoinPanel();
                 if (!silent) {
                     showMessage(qs('#message'), 'Grouping is not ready yet. Please wait for the teacher.', true);
                 }
                 return false;
             }
+            hideRejoinPanel();
             if (!silent) {
                 showMessage(qs('#message'), error.message, true);
             } else {
@@ -119,6 +145,38 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
+    async function resolveRememberedSession(sessionId) {
+        try {
+            const session = await apiRequest('/sessions/' + sessionId);
+            if (session && session.status !== 'ENDED') {
+                sessionMetaMap[String(sessionId)] = session;
+                return sessionId;
+            }
+        } catch (error) {
+        }
+        storage.remove('joinedSessionId');
+        storage.remove('currentGroup');
+        storage.remove('manualDiscussionReturn');
+        return null;
+    }
+
+    function showRejoinPanel(group, sessionId) {
+        var sessionMeta = sessionMetaMap[String(sessionId)] || cachedSessions.find(function (s) {
+            return Number(s.id) === Number(sessionId);
+        });
+        var sessionLabel = sessionMeta && sessionMeta.topic ? '"' + sessionMeta.topic + '"' : 'your current session';
+        rejoinReady = true;
+        qs('#rejoinCard').style.display = 'grid';
+        qs('#rejoinMessage').textContent = (group && group.groupName ? group.groupName : 'Your group') + ' is ready in ' + sessionLabel + '. You can rejoin the discussion at any time before it ends.';
+    }
+
+    function hideRejoinPanel() {
+        rejoinReady = false;
+        manualDiscussionReturn = false;
+        storage.remove('manualDiscussionReturn');
+        qs('#rejoinCard').style.display = 'none';
+    }
+
     function updateButtonState() {
         var hasSelection = !!qs('#sessionSelect').value;
         qs('#joinSessionButton').disabled = !hasSelection;
@@ -126,6 +184,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function loadOpenSessions() {
         cachedSessions = await apiRequest('/sessions/open');
+        sessionMetaMap = {};
+        cachedSessions.forEach(function (session) {
+            sessionMetaMap[String(session.id)] = session;
+        });
         qs('#sessionSelect').innerHTML = '<option value="">Select a session</option>' + cachedSessions.map(function (session) {
             var teacher = session.teacherName ? ' - ' + session.teacherName : '';
             return '<option value="' + session.id + '">' + session.topic + ' - ' + session.status + teacher + '</option>';

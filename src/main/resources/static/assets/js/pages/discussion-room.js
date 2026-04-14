@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = './waiting-room.html';
         return;
     }
-    storage.remove('joinedSessionId');
     let speaking = false;
     let stoppingSpeaking = false;
     let fallbackTimer = null;
@@ -36,12 +35,18 @@ document.addEventListener('DOMContentLoaded', function () {
     qs('#groupName').textContent = group.groupName;
     qs('#sessionIdText').textContent = group.sessionId || '-';
     qs('#sessionStatusText').textContent = 'Waiting';
+    storage.remove('manualDiscussionReturn');
     syncGroupAvatarAssignments(group.members || []);
     renderMembers(group.members || []);
     renderRanking(group.members || []);
     renderRaceTrack(group.members || []);
     initTimer(group.sessionId);
     updateAiCompanion('idle', 'Ask for a prompt when the discussion slows down, or keep speaking to energise the room.');
+
+    qs('#backToWaitingButton').addEventListener('click', function () {
+        storage.set('manualDiscussionReturn', true);
+        window.location.href = './waiting-room.html';
+    });
 
     function loadSpeakingLog() {
         var btn = qs('#refreshLogButton');
