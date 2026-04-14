@@ -1,0 +1,201 @@
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background:
+        radial-gradient(circle at 12% 18%, var(--bg-glow-cyan) 0, transparent 28%),
+        radial-gradient(circle at 82% 14%, var(--bg-glow-violet) 0, transparent 24%),
+        radial-gradient(circle at 72% 76%, var(--bg-glow-blue) 0, transparent 32%),
+        linear-gradient(145deg, #f8fbff 0%, #eef5ff 34%, #edf4ff 66%, #f7f9ff 100%);
+    background-attachment: fixed;
+    color: var(--text-1);
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(120deg, rgba(255, 255, 255, .38), transparent 24%, transparent 72%, rgba(255, 255, 255, .2)),
+        radial-gradient(circle at top left, rgba(255, 255, 255, .5), transparent 40%);
+    opacity: .8;
+    z-index: -2;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .06) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .2), transparent 80%);
+    opacity: .3;
+    z-index: -1;
+}
+
+/* Typography */
+h1, h2, h3 { margin: 0; }
+h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.03em; }
+h2 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    padding-left: 14px;
+    border-left: 3px solid rgba(79, 134, 247, .9);
+}
+
+/* Page Header */
+.page-header {
+    background:
+        linear-gradient(135deg, rgba(24, 62, 134, .88) 0%, rgba(47, 101, 214, .84) 48%, rgba(109, 96, 224, .72) 100%);
+    color: var(--text-inv);
+    padding: 24px 0;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, .18);
+    box-shadow: 0 12px 36px rgba(31, 71, 143, .18);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -40px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(255, 255, 255, .18) 0%, rgba(210, 189, 255, .18) 18%, transparent 68%);
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(10px);
+}
+
+.page-header::after {
+    content: '';
+    position: absolute;
+    bottom: -120px;
+    left: -40px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(140, 206, 255, .24) 0%, transparent 62%);
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(8px);
+}
+
+.page-header h1 {
+    color: var(--text-inv);
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.page-header-sub {
+    color: rgba(255, 255, 255, .78);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* Teacher header variant */
+.page-header-teacher {
+    background:
+        linear-gradient(135deg, rgba(17, 52, 121, .88) 0%, rgba(39, 98, 201, .84) 52%, rgba(121, 88, 230, .72) 100%);
+}
+
+/* Student header variant */
+.page-header-student {
+    background:
+        linear-gradient(135deg, rgba(20, 91, 133, .86) 0%, rgba(42, 128, 199, .84) 48%, rgba(118, 108, 235, .7) 100%);
+}
+
+/* Page Body */
+.page-body {
+    padding: 0 0 40px;
+}
+
+/* Page Shell */
+.page-shell {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 32px 0;
+}
+
+.page-shell.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container */
+.container {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+/* Stack / Row */
+.stack {
+    display: grid;
+    gap: 16px;
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Login Brand */
+.login-brand {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.login-logo {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 14px;
+    background: linear-gradient(135deg, var(--blue-600), var(--cyan-500) 56%, var(--violet-500) 100%);
+    border: 1px solid rgba(255, 255, 255, .24);
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-inv);
+    box-shadow: 0 18px 38px rgba(53, 107, 231, .24), 0 0 0 1px rgba(255, 255, 255, .24) inset;
+    animation: logo-float 6s ease-in-out infinite;
+}
+
+.login-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-1);
+    letter-spacing: -0.03em;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: var(--text-2);
+    margin-top: 4px;
+}
+
+/* Message */
+#message {
+    font-size: 14px;
+    font-weight: 500;
+    min-height: 20px;
+}

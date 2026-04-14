@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenMind - Waiting Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
+    <link rel="stylesheet" href="../assets/css/tokens.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/pages.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+</head>
+<body>
+<div class="page-header page-header-student">
+    <div class="container">
+        <div class="header-shell">
+            <div class="header-copy">
+                <div class="header-eyebrow">Student Lobby</div>
+                <h1>Waiting Room</h1>
+                <div class="page-header-sub">Pick a live session, join the queue, and stay ready for group assignment.</div>
+                <div class="header-meta-line">
+                    <span class="header-meta-pill">Welcome <strong id="userName"></strong></span>
+                    <span class="header-meta-pill">Participants <strong id="participantCount">-</strong></span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="openHistoryBtn" class="btn btn-glass" type="button">History</button>
+                <button class="btn btn-glass" type="button" onclick="window.location.href='./student-settings.html?from=waiting-room'">Settings</button>
+                <button class="btn btn-glass" type="button" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-body">
+    <div class="container waiting-layout">
+        <div class="waiting-main">
+            <div class="card stack">
+                <div class="card-header">
+                    <div class="stack" style="gap:6px;">
+                        <div class="card-kicker">Join</div>
+                        <h2>Join A Session</h2>
+                        <div class="card-subtitle">Select an open session and enter the waiting room. Group assignment will appear automatically when the teacher is ready.</div>
+                    </div>
+                </div>
+                <div class="waiting-form">
+                    <select id="sessionSelect" class="input"></select>
+                    <button id="joinSessionButton" class="btn" type="button" disabled>Join Waiting Room</button>
+                </div>
+                <div id="sessionInfo" class="waiting-session-info" style="display:none;"></div>
+                <div id="message"></div>
+            </div>
+            <div class="card stack">
+                <div class="card-header">
+                    <div class="stack" style="gap:6px;">
+                        <div class="card-kicker">Available</div>
+                        <h2>Open Sessions</h2>
+                        <div class="card-subtitle">A quick glance at the sessions you can join right now.</div>
+                    </div>
+                </div>
+                <div id="sessionPreviewList" class="waiting-session-list"></div>
+            </div>
+        </div>
+        <div class="waiting-side">
+            <div class="card stack">
+                <div class="card-header">
+                    <div class="stack" style="gap:6px;">
+                        <div class="card-kicker">Status</div>
+                        <h2>Lobby Snapshot</h2>
+                    </div>
+                </div>
+                <div id="waitingStats" class="detail-metric-grid"></div>
+            </div>
+            <div class="card stack">
+                <div class="card-header">
+                    <div class="stack" style="gap:6px;">
+                        <div class="card-kicker">Next</div>
+                        <h2>What Happens Next</h2>
+                    </div>
+                </div>
+                <div class="waiting-steps">
+                    <div class="waiting-step"><span>1</span><div>Select a session from the list.</div></div>
+                    <div class="waiting-step"><span>2</span><div>Join the waiting room and keep this page open.</div></div>
+                    <div class="waiting-step"><span>3</span><div>You will move to your discussion room when grouping is ready.</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="historyOverlay" class="notification-overlay" style="display:none;">
+    <div class="notification-box waiting-history-modal">
+        <div id="historyHeader" class="waiting-history-header">
+            <h2 id="historyTitle" style="margin:0;font-size:18px;">My History</h2>
+            <button id="closeHistoryBtn" class="btn btn-outline" type="button">Close</button>
+        </div>
+        <div id="historyContent" class="waiting-history-content">Loading...</div>
+    </div>
+</div>
+<script src="../assets/js/common/storage.js"></script>
+<script src="../assets/js/common/api.js"></script>
+<script src="../assets/js/common/auth.js"></script>
+<script src="../assets/js/common/utils.js"></script>
+<script src="../assets/js/common/websocket.js"></script>
+<script src="../assets/js/pages/waiting-room.js"></script>
+</body>
+</html>

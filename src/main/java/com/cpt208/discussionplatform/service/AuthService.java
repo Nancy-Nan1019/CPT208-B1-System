@@ -1,5 +1,6 @@
 package com.cpt208.discussionplatform.service;
 
+import java.util.Optional;
 import com.cpt208.discussionplatform.dto.request.LoginRequest;
 import com.cpt208.discussionplatform.dto.request.RegisterRequest;
 import com.cpt208.discussionplatform.dto.response.AuthResponse;
@@ -8,6 +9,7 @@ import com.cpt208.discussionplatform.entity.User;
 import com.cpt208.discussionplatform.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import javax.sql.DataSource;
 
 @Service
 public class AuthService {
@@ -15,11 +17,13 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final DataSource dataSource;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, DataSource dataSource) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.dataSource = dataSource;
     }
 
     public AuthResponse register(RegisterRequest request) {
@@ -36,11 +40,27 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new IllegalArgumentException("Account does not exist"));
+        try (java.sql.Connection conn = dataSource.getConnection()) {
+            System.out.println("jdbc url = " + conn.getMetaData().getURL());
+            System.out.println("jdbc user = " + conn.getMetaData().getUserName());
+            System.out.println("catalog = " + conn.getCatalog());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("login email = [" + request.getEmail() + "]");
+
+        Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
+        System.out.println("query result present = " + userOpt.isPresent());
+
+        User user = userOpt.orElseThrow(() ->
+            new IllegalArgumentException("Account does not exist")
+        );
+
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Incorrect password");
         }
+
         return toAuthResponse(user);
     }
 
