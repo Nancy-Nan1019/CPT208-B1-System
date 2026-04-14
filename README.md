@@ -300,8 +300,6 @@ Example demo accounts referenced in the project documentation:
 ## Related Documents
 
 - [PRD-DiscussionPlatform.md](PRD-DiscussionPlatform.md)
-- `D:\XJTLU\Year Three 2\cpt208\GroupSystem\PRD-DiscussionPlatform1.0.md`
-- `D:\XJTLU\Year Three 2\cpt208\GroupSystem\USER_GUIDE.md`
 
 ## Course Requirement Mapping
 
@@ -317,7 +315,6 @@ This project addresses the coursework requirements as follows:
 
 ## Notes
 
-- The project currently includes build artifacts in `target/` because the packaged system has been generated locally for testing and deployment.
 - For assessment or presentation, the most important evidence is:
   - live URL
   - a functioning teacher flow
