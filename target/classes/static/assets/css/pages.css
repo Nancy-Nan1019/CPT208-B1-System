@@ -1367,6 +1367,27 @@
     grid-template-columns: minmax(0, 1.25fr) minmax(280px, .85fr);
     gap: 20px;
     align-items: start;
+    position: relative;
+    z-index: 2;
+}
+
+.waiting-corner-mascot {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: min(24vw, 300px);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.waiting-corner-mascot-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: .96;
+    filter: drop-shadow(0 18px 40px rgba(35, 68, 166, .18));
+    animation: mascot-bob 4.2s ease-in-out infinite;
+    transform-origin: left bottom;
 }
 
 .waiting-main,
@@ -1567,6 +1588,12 @@
 }
 
 @media (max-width: 640px) {
+    .waiting-corner-mascot {
+        top: -4px;
+        width: min(42vw, 190px);
+        opacity: .92;
+    }
+
     .waiting-history-header,
     .result-member-head {
         flex-direction: column;
