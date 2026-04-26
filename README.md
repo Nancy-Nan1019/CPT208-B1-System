@@ -8,6 +8,11 @@ The system supports teacher-led discussion sessions, balanced group formation, r
 - Live URL: `http://111.170.157.76:9527/pages/login.html`
 - Default entry page: [src/main/resources/static/pages/login.html](src/main/resources/static/pages/login.html)
 
+## Source Repository
+
+- GitHub Repository: `https://github.com/Nancy-Nan1019/CPT208-B1-System`
+
+
 This project is a real interactive system rather than a static mock-up:
 - users can register and log in
 - teachers can create, group, start, monitor, and end discussion sessions
@@ -155,6 +160,10 @@ Evidence in the codebase:
 See:
 - [pom.xml](pom.xml)
 - [application.yml](src/main/resources/application.yml)
+
+## AI Coding Logs
+
+This repository includes an [`ailogs/`](ailogs) folder that records the primary English prompts used during AI-assisted development and documentation work.
 
 ## How the System Handles User Input and Interaction State
 
