@@ -10,5 +10,6 @@ The prompts are grouped by task area:
 - `04-documentation-and-demo-prompts.md`: README, architecture, deployment, and demo-video prompts
 - `05-backend-and-system-prompts.md`: backend architecture, authentication, WebSocket, persistence, and integration prompts
 - `06-debugging-and-deployment-prompts.md`: debugging, environment setup, deployment, and collaboration prompts
+- `07-testing-and-validation-prompts.md`: functional testing, multi-role validation, WebSocket checks, accessibility QA, and submission-readiness prompts
 
 These logs are included to document the primary AI-supported ideation, implementation guidance, system reasoning, and debugging assistance used during the project.

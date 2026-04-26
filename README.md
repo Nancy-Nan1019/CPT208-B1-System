@@ -11,6 +11,7 @@ The system supports teacher-led discussion sessions, balanced group formation, r
 ## Source Repository
 
 - GitHub Repository: `https://github.com/Nancy-Nan1019/CPT208-B1-System`
+- Submission note: the repository should be public, or otherwise accessible to assessors, during the marking period.
 
 
 This project is a real interactive system rather than a static mock-up:
@@ -163,7 +164,43 @@ See:
 
 ## AI Coding Logs
 
-This repository includes an [`ailogs/`](ailogs) folder that records the primary English prompts used during AI-assisted development and documentation work.
+This repository includes an [`ai-logs/`](ai-logs) folder that records the primary English prompts used during AI-assisted development and documentation work.
+
+The current AI log categories include:
+- UI redesign and visual-system prompts
+- gamification and playful interaction prompts
+- avatar, rejoin, and session-flow prompts
+- documentation, portfolio, and video-demo prompts
+- backend architecture and system-integration prompts
+- debugging, deployment, and collaboration prompts
+- testing and validation prompts
+
+## Accessibility Evidence
+
+The interface follows several basic accessibility-oriented practices visible in the current implementation:
+
+- keyboard focus states are styled for interactive controls, helping users track navigation through buttons, inputs, and action elements
+- responsive layouts are provided through shared responsive stylesheets and page-level media queries, supporting desktop and smaller-screen use
+- reduced-motion handling is considered through `prefers-reduced-motion` rules for users who may be sensitive to animation
+- standard HTML forms and buttons are used throughout the login, session, and discussion workflows to preserve familiar browser interaction patterns
+- manual accessibility-oriented QA was used during review, including checks for focus visibility, readable layout structure, touch interaction, and general usability during multi-page flows
+
+This project does not claim full formal accessibility certification, but it aims to follow basic web-standards practice and maintain usable interaction patterns across its main flows.
+
+## Testing and Validation
+
+The project has been evaluated mainly through iterative functional testing and scenario-based walkthroughs rather than a full automated test suite.
+
+Typical validation scenarios include:
+- teacher registration, login, and session creation
+- student join flow through waiting room and discussion room
+- auto-grouping and manual group adjustment
+- `Hold to Speak` interaction and real-time ranking updates
+- AI guide requests during discussion
+- teacher-side monitoring and end-of-session result review
+- multi-client checks for avatar consistency, WebSocket synchronisation, and rejoin behaviour
+
+Supporting AI-assisted testing prompts are recorded in [`ai-logs/`](ai-logs).
 
 ## How the System Handles User Input and Interaction State
 
@@ -222,6 +259,7 @@ open-mind-system
 |     |  |- images
 |     |  `- js
 |     `- pages
+|- ai-logs
 |- pom.xml
 `- README.md
 ```
