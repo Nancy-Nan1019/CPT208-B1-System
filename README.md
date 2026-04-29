@@ -344,9 +344,6 @@ Example demo accounts referenced in the project documentation:
 8. Trigger AI guide in the discussion room.
 9. End the session and open the result page.
 
-## Related Documents
-
-- [PRD-DiscussionPlatform.md](PRD-DiscussionPlatform.md)
 
 ## Course Requirement Mapping
 
