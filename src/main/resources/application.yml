@@ -3,14 +3,14 @@ server:
 
 spring:
   datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/cpt208_discussion?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:}
+    url: jdbc:mysql://111.170.157.76:13306/cpt208_discussion?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: heisu2024
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
-    password: ${REDIS_PASSWORD:}
+    host: 110.42.66.87
+    port: 16379
+    password: heisu2004
     timeout: 60000ms
   jpa:
     hibernate:
@@ -25,11 +25,11 @@ spring:
 
 app:
   cors:
-    allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:3000}
+    allowed-origin: http://localhost:3000
   jwt:
-    secret: ${JWT_SECRET:change-this-jwt-secret-before-deploying}
-    access-token-days: ${JWT_ACCESS_TOKEN_DAYS:7}
+    secret: ${JWT_SECRET:cpt208-discussion-platform-jwt-secret-key-2026}
+    access-token-days: 7
   ai:
-    api-key: ${DEEPSEEK_API_KEY:}
-    api-url: ${DEEPSEEK_API_URL:https://api.deepseek.com/chat/completions}
-    model: ${DEEPSEEK_MODEL:deepseek-chat}
+    api-key: sk-19e76d5685814c74858671db56315762
+    api-url: https://api.deepseek.com/chat/completions
+    model: deepseek-chat
