@@ -100,3 +100,16 @@ I want the AI area to feel more alive and supportive through:
 - guidance bubbles
 
 Please propose a UI behaviour model for the companion, including idle, guiding, encouraging, and wrap-up states.
+
+## Short Prompts
+
+- The discussion room is functional, but not playful enough. What is the easiest frontend-only improvement?
+- How can I make speaking feel more animated without making the interface distracting?
+- The gamification should feel cute but still academic. What visual balance would you recommend?
+- The race track looks useful, but maybe still too static. What small enhancements could improve it?
+- Which existing data can be reused to drive playful feedback without adding new APIs?
+- The AI guide works, but the companion still feels flat. How can I make it feel more alive?
+- I want the discussion room to feel rewarding. What micro-celebration moments are safe to add?
+- Which playful feature gives the biggest visual impact for the lowest implementation risk?
+- Please analyse whether the current gamification improves comparison or just adds decoration.
+- What playful elements should definitely not be added because they would hurt usability?

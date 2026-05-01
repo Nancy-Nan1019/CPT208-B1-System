@@ -116,3 +116,16 @@ The project includes:
 - documentation and deployment
 
 Please draft contribution wording that sounds fair, specific, and suitable for an academic project portfolio.
+
+## Short Prompts
+
+- Please analyse whether this README sounds complete enough for coursework submission.
+- Which section of the README still feels weak or underexplained?
+- How should I explain our deployment more clearly in academic English?
+- Please help me rewrite this feature description so it sounds less repetitive.
+- Which three features should we emphasise most in the portfolio?
+- How should we describe the system architecture in a simple but professional way?
+- Please analyse whether our video plan tells a clear story or just lists features.
+- What should we show on screen first in the demo video?
+- Help me write a shorter and cleaner AI disclosure statement.
+- Please make this documentation sound more accurate and less exaggerated.

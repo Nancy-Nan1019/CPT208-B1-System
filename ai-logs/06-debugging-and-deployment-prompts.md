@@ -156,3 +156,16 @@ For each item, say:
 - needs work
 
 Then suggest the most urgent fixes first.
+
+## Short Prompts
+
+- `mvn` is not recognised on this machine. What should I check first?
+- The project runs for me but not for my teammate. What configuration mismatch should we look for?
+- The live server works, but some test accounts do not. What might be happening?
+- Please analyse whether this deployment approach is stable enough for a coursework demo.
+- The repository is still private. Is that risky for submission?
+- I changed code locally before pulling remote updates. What is the safest Git workflow now?
+- The old folder name changed from `ailogs` to `ai-logs`. How should I stage that cleanly in Git?
+- Which files should definitely not be pushed to GitHub in this project?
+- The deployment script works, but looks messy. What should be cleaned up first?
+- Please help me audit this repo for last-minute submission risks.

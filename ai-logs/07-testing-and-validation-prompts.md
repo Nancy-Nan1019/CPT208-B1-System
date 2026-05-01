@@ -147,3 +147,16 @@ The testing was mainly:
 
 Write it in academic English.
 Make it sound responsible and professional, without pretending that we built a full industrial automated testing pipeline.
+
+## Short Prompts
+
+- Please help me make a quick manual testing checklist for our main demo flow.
+- Which three user journeys are most important to test before presentation day?
+- How should we test WebSocket synchronisation with two student accounts and one teacher account?
+- What is the simplest way to verify the `Hold to Speak` feature is not double-counting?
+- Please analyse which part of the current system is most likely to fail during a live demo.
+- How can we test the rejoin flow without overcomplicating the setup?
+- What accessibility checks can we realistically do before submission?
+- How should we document manual testing without making it sound weak?
+- Please help me turn our informal testing into a cleaner validation summary.
+- Which demo-breaking bugs should we check for one last time before recording the video?

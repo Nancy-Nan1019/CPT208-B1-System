@@ -79,3 +79,16 @@ Please discuss:
 - how the UI should communicate the restriction if we enforce “one active session per user at a time”
 
 Do not implement yet. I want an analysis-first answer with low-risk options.
+
+## Short Prompts
+
+- The new SVG avatars are cute, but they look too large. How should I normalise them?
+- The avatar shape is not circular anymore. How can I make it still look neat in cards and lists?
+- Avatar assignment feels random in a bad way. How can I make it stable per group?
+- The leaderboard would look better with avatars. What is the cleanest layout for that?
+- The rejoin wording feels too technical. How should I rewrite it in simpler English?
+- The waiting room mixes first-time join and rejoin too closely. How should those states be separated?
+- Please analyse the current rejoin flow and point out where users may get confused.
+- If a student leaves during a running session, what is the safest way to let them back in?
+- The same user should probably not join two sessions at once. Should this be blocked on frontend, backend, or both?
+- Which part of the avatar/rejoin experience feels least polished right now?

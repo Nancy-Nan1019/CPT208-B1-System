@@ -205,3 +205,18 @@ Please suggest how to derive:
 - student-facing summary metrics
 
 Do not require adding new database tables unless absolutely necessary.
+
+## Short Prompts
+
+- Please analyse whether the current backend structure is clean enough for a student project.
+- Which controller currently sounds like it might be handling too many responsibilities?
+- Do I really need Redis for this feature, or is in-memory state enough?
+- What data should definitely be stored in MySQL rather than kept only in memory?
+- Is this WebSocket design secure enough for a classroom project?
+- Please explain the safest way to validate that a student belongs to a session before sending updates.
+- The service layer feels messy. How should I split responsibilities more clearly?
+- Which entity relationships are essential, and which ones might be overcomplicated?
+- How should I handle AI API failure without breaking the user experience?
+- Please analyse whether the result logic can be improved without changing the database schema.
+- The runtime state and persistent state feel mixed together. How should I separate them conceptually?
+- How can I make the backend easier for teammates to understand and maintain?

@@ -98,3 +98,16 @@ Please suggest a page-system refinement plan that improves:
 - spacing rhythm and desktop layout balance
 
 Do not change the workflow logic. The goal is to make the teacher experience feel more professional and cohesive.
+
+## Short Prompts
+
+- The current button styles feel too plain. How can I make them look more polished without changing functionality?
+- The page spacing feels inconsistent. Please point out which areas should be tightened or expanded.
+- The discussion room looks crowded. Which module should visually stand out the most?
+- The color system feels messy. Which colors should be kept, reduced, or removed?
+- The cards all look too similar. How can I create a clearer visual hierarchy?
+- The alert state is not noticeable enough. How should I redesign it so teachers notice it immediately?
+- The result page feels repetitive. Which sections should look more distinct from each other?
+- The teacher pages do not feel like one system. What should be unified first?
+- The current visual style works, but it still feels generic. What would make it feel more intentional?
+- Please analyse which page has the weakest UI right now and explain why.
