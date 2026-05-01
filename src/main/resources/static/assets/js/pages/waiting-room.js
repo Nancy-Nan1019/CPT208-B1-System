@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         refreshParticipantCount(rememberedSessionId);
     }
     updateButtonState();
+    updateLobbyProgress(!!rememberedSessionId, false);
 
     qs('#sessionSelect').addEventListener('change', function () {
         updateButtonState();
@@ -45,6 +46,18 @@ document.addEventListener('DOMContentLoaded', async function () {
             qs('#historyOverlay').style.display = 'none';
         }
     });
+    qs('#viewAllSessionsBtn').addEventListener('click', function () {
+        renderAllSessions();
+        qs('#allSessionsOverlay').style.display = 'flex';
+    });
+    qs('#closeAllSessionsBtn').addEventListener('click', function () {
+        qs('#allSessionsOverlay').style.display = 'none';
+    });
+    qs('#allSessionsOverlay').addEventListener('click', function (e) {
+        if (e.target === qs('#allSessionsOverlay')) {
+            qs('#allSessionsOverlay').style.display = 'none';
+        }
+    });
 
     qs('#joinSessionButton').addEventListener('click', async function () {
         try {
@@ -66,6 +79,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             connectRealtime(sessionId);
             refreshParticipantCount(sessionId);
             renderWaitingStats(sessionId);
+            updateLobbyProgress(true, false);
             showMessage(qs('#message'), 'Joined the waiting room');
         } catch (error) {
             showMessage(qs('#message'), error.message, true);
@@ -168,6 +182,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         rejoinReady = true;
         qs('#rejoinCard').style.display = 'grid';
         qs('#rejoinMessage').textContent = (group && group.groupName ? group.groupName : 'Your group') + ' is ready in ' + sessionLabel + '. You can rejoin the discussion at any time before it ends.';
+        updateLobbyProgress(true, true);
     }
 
     function hideRejoinPanel() {
@@ -175,6 +190,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         manualDiscussionReturn = false;
         storage.remove('manualDiscussionReturn');
         qs('#rejoinCard').style.display = 'none';
+        updateLobbyProgress(!!storage.get('joinedSessionId'), false);
     }
 
     function updateButtonState() {
@@ -227,13 +243,33 @@ document.addEventListener('DOMContentLoaded', async function () {
         var list = qs('#sessionPreviewList');
         if (!cachedSessions.length) {
             list.innerHTML = '<div class="panel-empty">No open sessions right now.</div>';
+            qs('#viewAllSessionsBtn').style.display = 'none';
             return;
         }
-        list.innerHTML = cachedSessions.map(function (session) {
+        var previewSessions = cachedSessions.slice(0, 2);
+        list.innerHTML = renderSessionCards(previewSessions, selectedId);
+        qs('#viewAllSessionsBtn').style.display = cachedSessions.length > previewSessions.length ? 'inline-flex' : 'none';
+        bindSessionCards('#sessionPreviewList');
+    }
+
+    function renderAllSessions() {
+        var selectedId = Number(qs('#sessionSelect').value);
+        var list = qs('#allSessionsList');
+        if (!cachedSessions.length) {
+            list.innerHTML = '<div class="panel-empty">No open sessions right now.</div>';
+            return;
+        }
+        list.innerHTML = renderSessionCards(cachedSessions, selectedId);
+        bindSessionCards('#allSessionsList');
+    }
+
+    function renderSessionCards(sessions, selectedId) {
+        return sessions.map(function (session) {
             var activeClass = session.id === selectedId ? ' active' : '';
-            return '<div class="session-card waiting-session-card' + activeClass + '">' +
+            return '<div class="session-card waiting-session-card' + activeClass + '" role="button" tabindex="0" data-session-id="' + session.id + '">' +
                 '<div class="session-card-head">' +
                 '<div>' +
+                '<div class="waiting-session-icon" aria-hidden="true">' + getSessionMark(session.status) + '</div>' +
                 '<div class="session-card-title">' + escapeHtml(session.topic || '') + '</div>' +
                 '<div class="session-card-meta">' +
                 '<span class="meta-chip"><strong>' + (session.durationMinutes || '-') + '</strong> min</span>' +
@@ -252,10 +288,68 @@ document.addEventListener('DOMContentLoaded', async function () {
         var selectedSession = cachedSessions.find(function (s) { return s.id === selectedId; });
         var stats = qs('#waitingStats');
         stats.innerHTML =
-            '<div class="detail-metric"><div class="detail-metric-label">Open Sessions</div><div class="detail-metric-value">' + cachedSessions.length + '</div></div>' +
-            '<div class="detail-metric"><div class="detail-metric-label">Joined Session</div><div class="detail-metric-value">' + (joinedSessionId ? 'Yes' : 'No') + '</div></div>' +
-            '<div class="detail-metric"><div class="detail-metric-label">Selected Topic</div><div class="detail-metric-value">' + escapeHtml(selectedSession ? selectedSession.topic : '-') + '</div></div>' +
-            '<div class="detail-metric"><div class="detail-metric-label">Realtime</div><div class="detail-metric-value">' + (realtimeConnected ? 'Live' : 'Polling') + '</div></div>';
+            '<div class="detail-metric waiting-board-metric"><div class="detail-metric-label">Rooms Open</div><div class="detail-metric-value">' + cachedSessions.length + '</div></div>' +
+            '<div class="detail-metric waiting-board-metric"><div class="detail-metric-label">My Seat</div><div class="detail-metric-value">' + (joinedSessionId ? 'Saved' : 'Not Yet') + '</div></div>' +
+            '<div class="detail-metric waiting-board-metric"><div class="detail-metric-label">Current Mission</div><div class="detail-metric-value">' + escapeHtml(selectedSession ? selectedSession.topic : '-') + '</div></div>' +
+            '<div class="detail-metric waiting-board-metric"><div class="detail-metric-label">Connection</div><div class="detail-metric-value">' + (realtimeConnected ? 'Live' : 'Checking') + '</div></div>';
+    }
+
+    function bindSessionCards(containerSelector) {
+        var root = containerSelector ? qs(containerSelector) : document;
+        var cards = Array.from(root.querySelectorAll('.waiting-session-card'));
+        for (var i = 0; i < cards.length; i++) {
+            cards[i].addEventListener('click', selectSessionCard);
+            cards[i].addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    selectSessionCard.call(this);
+                }
+            });
+        }
+    }
+
+    function selectSessionCard() {
+        var sessionId = this.getAttribute('data-session-id');
+        qs('#sessionSelect').value = sessionId;
+        updateButtonState();
+        showSessionInfo();
+        renderSessionPreview();
+        if (qs('#allSessionsOverlay').style.display !== 'none') {
+            qs('#allSessionsOverlay').style.display = 'none';
+        }
+        renderWaitingStats(storage.get('joinedSessionId'));
+    }
+
+    function updateLobbyProgress(joined, ready) {
+        var pulse = qs('#waitingPulse');
+        if (pulse) {
+            pulse.style.display = joined && !ready ? 'flex' : 'none';
+        }
+        var steps = qsa('.waiting-path-step');
+        for (var i = 0; i < steps.length; i++) {
+            steps[i].classList.remove('active', 'current');
+        }
+        if (steps[0]) {
+            steps[0].classList.add('active');
+        }
+        if (joined && steps[1]) {
+            steps[1].classList.add('active');
+        }
+        if (ready && steps[2]) {
+            steps[2].classList.add('active');
+        } else if (joined && steps[2]) {
+            steps[2].classList.add('current');
+        }
+    }
+
+    function getSessionMark(status) {
+        if (status === 'RUNNING') {
+            return 'LIVE';
+        }
+        if (status === 'CREATED') {
+            return 'NEW';
+        }
+        return 'OPEN';
     }
 
     async function refreshParticipantCount(sessionId) {

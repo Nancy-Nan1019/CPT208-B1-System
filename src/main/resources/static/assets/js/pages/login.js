@@ -7,12 +7,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const submit = qs('#submitButton');
     const submitText = qs('#submitButtonText');
     const toggleText = qs('#modeToggleText');
+    const subtitle = qs('#loginCardSubtitle');
     const message = qs('#message');
     const ideaIcon = qs('#omiIdeaIcon');
     const dropZone = qs('#omiDropZone');
     let mode = 'login';
 
     function revealOmiIntro() {
+        if (document.body.classList.contains('omi-intro-ready')) {
+            return;
+        }
         document.body.classList.add('omi-intro-ready');
         setTimeout(function () {
             document.body.classList.add('omi-idea-ready');
@@ -53,9 +57,12 @@ document.addEventListener('DOMContentLoaded', function () {
         revealOmiIntro();
     } else if (openingGif.complete && openingGif.naturalWidth > 0) {
         startOpeningSequence();
+    } else if (openingGif.complete) {
+        revealOmiIntro();
     } else {
         openingGif.addEventListener('load', startOpeningSequence, { once: true });
         openingGif.addEventListener('error', revealOmiIntro, { once: true });
+        setTimeout(revealOmiIntro, 1200);
     }
 
     function startExperience() {
@@ -107,11 +114,15 @@ document.addEventListener('DOMContentLoaded', function () {
     toggle.addEventListener('click', function () {
         mode = mode === 'login' ? 'register' : 'login';
         title.textContent = mode === 'login' ? 'Login' : 'Register';
+        subtitle.textContent = mode === 'login'
+            ? 'Sign in to continue your live discussion session.'
+            : 'Create your profile and choose an avatar for discussion.';
         submitText.textContent = mode === 'login' ? 'Login' : 'Register';
         submit.querySelector('.btn-icon').textContent = mode === 'login' ? '\uD83D\uDE80' : '\u2728';
         qs('#nameRow').style.display = mode === 'register' ? 'block' : 'none';
         qs('#name').required = mode === 'register';
         qs('#roleRow').style.display = mode === 'register' ? 'block' : 'none';
+        qs('#avatarRow').style.display = mode === 'register' ? 'block' : 'none';
         toggleText.textContent = mode === 'login' ? 'No account? Register' : 'Already have an account? Login';
         toggle.querySelector('.btn-icon').textContent = mode === 'login' ? '\u270F\uFE0F' : '\uD83D\uDD11';
     });
@@ -127,6 +138,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (mode === 'register') {
                 payload.name = qs('#name').value.trim();
                 payload.role = qs('#role').value;
+                var selectedAvatar = qs('input[name="avatar"]:checked');
+                payload.avatar = selectedAvatar ? selectedAvatar.value : 'kitty.png';
                 data = await apiRequest('/auth/register', {
                     method: 'POST',
                     body: JSON.stringify(payload)
@@ -138,6 +151,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
             saveAccessToken(data.accessToken);
+            if (mode === 'register' && data.user && !data.user.avatar) {
+                data.user.avatar = payload.avatar;
+            }
             saveCurrentUser(data.user);
             showMessage(message, mode === 'login' ? 'Login successful' : 'Registration successful');
             if (data.user.role === 'STUDENT') {

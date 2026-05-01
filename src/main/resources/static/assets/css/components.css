@@ -520,6 +520,107 @@ label:has(input:checked) {
     box-shadow: 0 0 0 3px rgba(79, 134, 247, .10);
 }
 
+.personality-option {
+    min-height: 76px;
+    align-items: center;
+    overflow: hidden;
+    color: var(--text-1);
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, .90), rgba(246, 251, 255, .78)),
+        url('../images/playful/firework.png') right 14px center / 82px auto no-repeat;
+}
+
+.personality-option:hover {
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, .94), rgba(239, 247, 255, .82)),
+        url('../images/playful/firework.png') right 12px center / 90px auto no-repeat;
+}
+
+.personality-option:has(input:checked) {
+    background:
+        linear-gradient(90deg, rgba(240, 247, 255, .94), rgba(232, 245, 255, .78)),
+        url('../images/playful/firework.png') right 12px center / 94px auto no-repeat;
+}
+
+.profile-card {
+    gap: 20px;
+}
+
+.profile-title-block {
+    display: grid;
+    gap: 6px;
+    text-align: center;
+}
+
+.profile-title-block h1 {
+    margin: 0;
+    color: var(--text-1);
+    font-size: 34px;
+    line-height: 1.05;
+}
+
+.profile-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 0;
+}
+
+.profile-avatar {
+    width: 104px;
+    height: 104px;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -1px;
+    box-shadow: 0 16px 34px rgba(79, 134, 247, .16);
+}
+
+.profile-name-block {
+    text-align: center;
+}
+
+.profile-name {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-1);
+    letter-spacing: -0.02em;
+}
+
+.profile-email {
+    font-size: 14px;
+    color: var(--text-2);
+    margin-top: 4px;
+}
+
+.profile-info-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.profile-info-item {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .68);
+    border: 1px solid rgba(126, 163, 227, .2);
+}
+
+.profile-info-item .detail-metric-value {
+    margin-top: 6px;
+    font-size: 16px;
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+.profile-avatar-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
 input[type="radio"] {
     accent-color: var(--blue-600);
     width: 18px;
@@ -724,4 +825,185 @@ input[type="radio"] {
     font-size: 14px;
     line-height: 1.6;
     color: var(--text-2);
+}
+
+/* Floating AI Assistant */
+.floating-ai {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 1100;
+    font-family: inherit;
+}
+
+.floating-ai-toggle {
+    width: 76px;
+    height: 76px;
+    border: none;
+    border-radius: 24px;
+    padding: 7px;
+    background: rgba(255, 255, 255, .84);
+    box-shadow: 0 20px 44px rgba(53, 107, 231, .22), 0 0 0 1px rgba(255, 255, 255, .66) inset;
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.floating-ai.dragging .floating-ai-toggle {
+    cursor: grabbing;
+    transform: scale(1.04);
+}
+
+.floating-ai-toggle:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 24px 50px rgba(53, 107, 231, .28), 0 0 0 1px rgba(255, 255, 255, .76) inset;
+}
+
+.floating-ai-toggle img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 18px;
+    object-fit: cover;
+}
+
+.floating-ai-panel {
+    position: absolute;
+    right: 0;
+    bottom: 92px;
+    width: min(360px, calc(100vw - 32px));
+    height: min(520px, calc(100vh - 130px));
+    display: none;
+    grid-template-rows: auto 1fr auto;
+    overflow: hidden;
+    border-radius: 24px;
+    background: rgba(248, 251, 255, .96);
+    border: 1px solid rgba(180, 197, 235, .64);
+    box-shadow: 0 28px 70px rgba(39, 72, 178, .24);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.floating-ai.align-left .floating-ai-panel {
+    left: 0;
+    right: auto;
+}
+
+.floating-ai-panel.open {
+    display: grid;
+}
+
+.floating-ai-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(180, 197, 235, .46);
+}
+
+.floating-ai-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-1);
+    font-weight: 800;
+}
+
+.floating-ai-title img {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.floating-ai-close {
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(180, 197, 235, .7);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .7);
+    color: var(--text-2);
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.floating-ai-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    overflow-y: auto;
+}
+
+.floating-ai-message {
+    max-width: 88%;
+    padding: 10px 12px;
+    border-radius: 16px;
+    color: var(--text-1);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.floating-ai-message.bot {
+    align-self: flex-start;
+    background: rgba(232, 240, 255, .88);
+}
+
+.floating-ai-message.user {
+    align-self: flex-end;
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue-600), var(--cyan-500));
+}
+
+.floating-ai-message.error {
+    color: var(--red-600);
+}
+
+.floating-ai-form {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid rgba(180, 197, 235, .46);
+}
+
+.floating-ai-input {
+    flex: 1;
+    min-width: 0;
+    border: 1.5px solid rgba(191, 205, 237, .88);
+    border-radius: 16px;
+    padding: 11px 12px;
+    font: inherit;
+    color: var(--text-1);
+    background: rgba(255, 255, 255, .86);
+}
+
+.floating-ai-input:focus {
+    outline: none;
+    border-color: var(--blue-500);
+    box-shadow: 0 0 0 3px rgba(79, 134, 247, .12);
+}
+
+.floating-ai-send {
+    border: none;
+    border-radius: 16px;
+    padding: 0 14px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue-600), var(--cyan-500));
+    font-weight: 800;
+    cursor: pointer;
+}
+
+@media (max-width: 640px) {
+    .floating-ai {
+        right: 14px;
+        bottom: 14px;
+    }
+
+    .floating-ai-toggle {
+        width: 66px;
+        height: 66px;
+        border-radius: 22px;
+    }
 }

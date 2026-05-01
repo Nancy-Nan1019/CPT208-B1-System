@@ -24,7 +24,7 @@
                 <div class="page-header-sub">Welcome back, <span id="teacherName"></span>. Create sessions, group students, and open live monitors from one place.</div>
             </div>
             <div class="header-actions">
-                <button class="btn btn-glass" type="button" onclick="window.location.href='./student-settings.html?from=teacher-dashboard'">Settings</button>
+                <button class="btn btn-glass" type="button" onclick="window.location.href='./student-settings.html?from=teacher-dashboard'">Profile</button>
                 <button class="btn btn-glass" onclick="logout()">Logout</button>
             </div>
         </div>
@@ -72,8 +72,18 @@
                     </div>
                 </div>
                 <div id="sessionList" class="session-list"></div>
+                <button id="viewAllTeacherSessionsBtn" class="btn btn-outline waiting-view-all-btn" type="button" style="display:none;">View All Sessions</button>
             </div>
         </div>
+    </div>
+</div>
+<div id="allTeacherSessionsOverlay" class="notification-overlay" style="display:none;">
+    <div class="notification-box waiting-history-modal waiting-all-sessions-modal">
+        <div class="waiting-history-header">
+            <h2 style="margin:0;font-size:18px;">All Sessions</h2>
+            <button id="closeAllTeacherSessionsBtn" class="btn btn-outline" type="button">Close</button>
+        </div>
+        <div id="allTeacherSessionsList" class="session-list"></div>
     </div>
 </div>
 <script src="../assets/js/common/storage.js"></script>
@@ -81,5 +91,6 @@
 <script src="../assets/js/common/auth.js"></script>
 <script src="../assets/js/common/utils.js"></script>
 <script src="../assets/js/pages/teacher-dashboard.js"></script>
+<script src="../assets/js/common/ai-assistant.js"></script>
 </body>
 </html>

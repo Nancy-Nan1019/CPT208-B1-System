@@ -20,6 +20,8 @@ public class RegisterRequest {
     @NotNull
     private RoleType role;
 
+    private String avatar;
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getPassword() { return password; }
@@ -28,4 +30,6 @@ public class RegisterRequest {
     public void setName(String name) { this.name = name; }
     public RoleType getRole() { return role; }
     public void setRole(RoleType role) { this.role = role; }
+    public String getAvatar() { return avatar; }
+    public void setAvatar(String avatar) { this.avatar = avatar; }
 }

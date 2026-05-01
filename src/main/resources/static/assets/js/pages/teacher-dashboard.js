@@ -37,12 +37,37 @@ document.addEventListener('DOMContentLoaded', async function () {
             showMessage(qs('#message'), error.message, true);
         }
     });
+    qs('#viewAllTeacherSessionsBtn').addEventListener('click', async function () {
+        const sessions = await apiRequest('/sessions/teacher');
+        qs('#allTeacherSessionsList').innerHTML = renderSessionCards(sessions);
+        qs('#allTeacherSessionsOverlay').style.display = 'flex';
+    });
+    qs('#closeAllTeacherSessionsBtn').addEventListener('click', function () {
+        qs('#allTeacherSessionsOverlay').style.display = 'none';
+    });
+    qs('#allTeacherSessionsOverlay').addEventListener('click', function (event) {
+        if (event.target === qs('#allTeacherSessionsOverlay')) {
+            qs('#allTeacherSessionsOverlay').style.display = 'none';
+        }
+    });
 
     async function loadSessions() {
         clearSessionCountdownTimers();
+        qs('#allTeacherSessionsOverlay').style.display = 'none';
         const sessions = await apiRequest('/sessions/teacher');
         renderStats(sessions);
-        qs('#sessionList').innerHTML = sessions.map(function (session) {
+        var previewSessions = sessions.slice(0, 2);
+        qs('#sessionList').innerHTML = renderSessionCards(previewSessions);
+        qs('#viewAllTeacherSessionsBtn').style.display = sessions.length > previewSessions.length ? 'inline-flex' : 'none';
+        applyStagger(qs('#sessionList'));
+        startSessionCountdowns(previewSessions);
+    }
+
+    function renderSessionCards(sessions) {
+        if (!sessions.length) {
+            return '<div class="panel-empty">No sessions yet.</div>';
+        }
+        return sessions.map(function (session) {
             var s = session.status;
             var statusClass = s === 'RUNNING' ? 'status-active' : (s === 'ENDED' ? 'status-ended' : 'status-warning');
             var actions = '';
@@ -85,8 +110,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 detailHtml +
                 '</div>';
         }).join('');
-        applyStagger(qs('#sessionList'));
-        startSessionCountdowns(sessions);
     }
 
     function renderStats(sessions) {

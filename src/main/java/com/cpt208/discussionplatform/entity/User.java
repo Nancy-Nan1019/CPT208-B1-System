@@ -37,6 +37,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private PersonalityType personality;
 
+    private String avatar;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
@@ -57,6 +59,8 @@ public class User {
     public void setRole(RoleType role) { this.role = role; }
     public PersonalityType getPersonality() { return personality; }
     public void setPersonality(PersonalityType personality) { this.personality = personality; }
+    public String getAvatar() { return avatar; }
+    public void setAvatar(String avatar) { this.avatar = avatar; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

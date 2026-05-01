@@ -1,0 +1,26 @@
+# Build output
+target/
+
+# OS files
+.DS_Store
+**/.DS_Store
+
+# IDE/editor local files
+.idea/
+.vscode/
+*.iml
+
+# Logs and runtime dumps
+*.log
+logs/
+*.pid
+
+# Local environment and secret overrides
+.env
+.env.*
+application-local.yml
+application-local.properties
+
+# Local dependency/cache folders
+.m2/
+.maven-home/

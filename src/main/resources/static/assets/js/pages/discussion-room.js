@@ -76,6 +76,18 @@ document.addEventListener('DOMContentLoaded', function () {
     loadSpeakingLog();
 
     qs('#refreshLogButton').addEventListener('click', loadSpeakingLog);
+    qs('#viewAllSpeakingLogsBtn').addEventListener('click', function () {
+        renderAllSpeakingLogs();
+        qs('#allSpeakingLogsOverlay').style.display = 'flex';
+    });
+    qs('#closeAllSpeakingLogsBtn').addEventListener('click', function () {
+        qs('#allSpeakingLogsOverlay').style.display = 'none';
+    });
+    qs('#allSpeakingLogsOverlay').addEventListener('click', function (event) {
+        if (event.target === qs('#allSpeakingLogsOverlay')) {
+            qs('#allSpeakingLogsOverlay').style.display = 'none';
+        }
+    });
 
     connectDiscussionSocket(group.sessionId, function (message) {
         if (message.type === 'SESSION_ENDED') {
@@ -477,12 +489,26 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!speakingTimeline.length) {
             container.innerHTML = '<div class="panel-empty">No speaking events yet.</div>';
             qs('#speakingLogMeta').textContent = '';
+            qs('#viewAllSpeakingLogsBtn').style.display = 'none';
             return;
         }
         var totalTurns = speakingTimeline.length;
         qs('#speakingLogMeta').textContent = totalTurns + ' turn' + (totalTurns > 1 ? 's' : '');
-        var recent = speakingTimeline.slice().reverse().slice(0, 30);
-        container.innerHTML = recent.map(function (entry) {
+        var recent = speakingTimeline.slice().reverse();
+        var preview = recent.slice(0, 2);
+        container.innerHTML = renderTimelineRows(preview);
+        qs('#viewAllSpeakingLogsBtn').style.display = recent.length > preview.length ? 'inline-flex' : 'none';
+    }
+
+    function renderAllSpeakingLogs() {
+        var container = qs('#allSpeakingLogsList');
+        if (!container) return;
+        var recent = speakingTimeline.slice().reverse();
+        container.innerHTML = recent.length ? renderTimelineRows(recent) : '<div class="panel-empty">No speaking events yet.</div>';
+    }
+
+    function renderTimelineRows(entries) {
+        return entries.map(function (entry) {
             var h = entry.time.getHours().toString().padStart(2, '0');
             var m = entry.time.getMinutes().toString().padStart(2, '0');
             var s = entry.time.getSeconds().toString().padStart(2, '0');
@@ -778,4 +804,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
-

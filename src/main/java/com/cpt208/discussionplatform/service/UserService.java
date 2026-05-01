@@ -24,8 +24,29 @@ public class UserService {
         return authService.toProfile(userRepository.save(user));
     }
 
+    public UserProfileResponse updateAvatar(Long userId, String avatar) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.setAvatar(normalizeAvatar(avatar));
+        return authService.toProfile(userRepository.save(user));
+    }
+
     public User getUser(Long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    private String normalizeAvatar(String avatar) {
+        switch (avatar) {
+            case "bat.png":
+            case "bird.png":
+            case "fox.png":
+            case "giraffe.png":
+            case "drawing.png":
+            case "kitty.png":
+                return avatar;
+            default:
+                throw new IllegalArgumentException("Invalid avatar");
+        }
     }
 }

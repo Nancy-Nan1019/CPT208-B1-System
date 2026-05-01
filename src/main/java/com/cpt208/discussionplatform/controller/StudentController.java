@@ -2,6 +2,7 @@ package com.cpt208.discussionplatform.controller;
 
 import com.cpt208.discussionplatform.dto.request.StartSpeakingRequest;
 import com.cpt208.discussionplatform.dto.request.StopSpeakingRequest;
+import com.cpt208.discussionplatform.dto.request.UpdateAvatarRequest;
 import com.cpt208.discussionplatform.dto.request.UpdatePersonalityRequest;
 import com.cpt208.discussionplatform.dto.request.JoinSessionRequest;
 import com.cpt208.discussionplatform.dto.response.ApiResponse;
@@ -73,6 +74,11 @@ public class StudentController {
     @PostMapping("/personality")
     public ResponseEntity<ApiResponse<UserProfileResponse>> updatePersonality(@Valid @RequestBody UpdatePersonalityRequest request) {
         return ResponseEntity.ok(ApiResponse.ok("Profile updated", userService.updatePersonality(getCurrentUserId(), request.getPersonality())));
+    }
+
+    @PostMapping("/avatar")
+    public ResponseEntity<ApiResponse<UserProfileResponse>> updateAvatar(@Valid @RequestBody UpdateAvatarRequest request) {
+        return ResponseEntity.ok(ApiResponse.ok("Avatar updated", userService.updateAvatar(getCurrentUserId(), request.getAvatar())));
     }
 
     @GetMapping("/group")

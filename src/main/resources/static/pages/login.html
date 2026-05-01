@@ -71,7 +71,7 @@
             </div>
             <div id="loginBubble" class="card stack login-card">
                 <h1 id="pageTitle">Login</h1>
-                <div class="login-card-subtitle">Sign in to continue your live discussion session.</div>
+                <div id="loginCardSubtitle" class="login-card-subtitle">Sign in to continue your live discussion session.</div>
                 <form id="loginForm" class="stack login-form">
                     <div id="nameRow" class="form-group" style="display:none;">
                         <label class="form-label" for="name">Name</label>
@@ -91,6 +91,35 @@
                             <option value="STUDENT">Student</option>
                             <option value="TEACHER">Teacher</option>
                         </select>
+                    </div>
+                    <div id="avatarRow" class="form-group login-avatar-row" style="display:none;">
+                        <div class="form-label">Avatar</div>
+                        <div class="login-avatar-grid" role="radiogroup" aria-label="Choose avatar">
+                            <label class="login-avatar-option">
+                                <input type="radio" name="avatar" value="bat.png">
+                                <span><img src="../assets/images/avatars/bat.png" alt="Bat avatar"></span>
+                            </label>
+                            <label class="login-avatar-option">
+                                <input type="radio" name="avatar" value="bird.png">
+                                <span><img src="../assets/images/avatars/bird.png" alt="Bird avatar"></span>
+                            </label>
+                            <label class="login-avatar-option">
+                                <input type="radio" name="avatar" value="fox.png">
+                                <span><img src="../assets/images/avatars/fox.png" alt="Fox avatar"></span>
+                            </label>
+                            <label class="login-avatar-option">
+                                <input type="radio" name="avatar" value="giraffe.png">
+                                <span><img src="../assets/images/avatars/giraffe.png" alt="Giraffe avatar"></span>
+                            </label>
+                            <label class="login-avatar-option">
+                                <input type="radio" name="avatar" value="drawing.png">
+                                <span><img src="../assets/images/avatars/drawing.png" alt="Drawing avatar"></span>
+                            </label>
+                            <label class="login-avatar-option">
+                                <input type="radio" name="avatar" value="kitty.png" checked>
+                                <span><img src="../assets/images/avatars/kitty.png" alt="Kitty avatar"></span>
+                            </label>
+                        </div>
                     </div>
                     <button id="submitButton" class="btn login-cta" type="submit">
                         <span class="btn-icon login-cta-icon" aria-hidden="true">&#x1F680;</span>

@@ -10,14 +10,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const isTeacher = user.role === 'TEACHER';
 
     var avatarEl = qs('#profileAvatar');
-    var initial = (user.name || '?').trim().charAt(0).toUpperCase();
-    avatarEl.textContent = initial;
-    avatarEl.style.background = isTeacher
-        ? 'linear-gradient(135deg, #312e81, var(--violet-600))'
-        : 'linear-gradient(135deg, #042f2e, var(--teal-500))';
+    renderProfileAvatar(user);
+    selectCurrentAvatar(user);
 
     qs('#profileName').textContent = user.name || '-';
     qs('#profileEmail').textContent = user.email || '';
+    qs('#profileNameSummary').textContent = user.name || '-';
+    qs('#profileEmailSummary').textContent = user.email || '-';
+    updatePersonalitySummary(user.personality, isTeacher);
 
     var badge = qs('#profileRoleBadge');
     badge.textContent = isTeacher ? 'Teacher' : 'Student';
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     badge.style.color = isTeacher ? 'var(--violet-600)' : 'var(--teal-600)';
 
     if (isTeacher) {
+        qs('#avatarSection').style.display = 'none';
         qs('#personalitySection').style.display = 'none';
     } else if (user.personality) {
         var selected = document.querySelector('input[name="personality"][value="' + user.personality + '"]');
@@ -51,6 +52,26 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     if (!isTeacher) {
+        qs('#avatarForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            try {
+                var avatar = qs('input[name="avatar"]:checked');
+                if (!avatar) {
+                    throw new Error('Please select an avatar');
+                }
+                var updatedUser = await apiRequest('/students/avatar', {
+                    method: 'POST',
+                    body: JSON.stringify({ avatar: avatar.value })
+                });
+                updatedUser = Object.assign({}, getCurrentUser() || user, updatedUser);
+                saveCurrentUser(updatedUser);
+                renderProfileAvatar(updatedUser);
+                showMessage(message, 'Avatar updated');
+            } catch (error) {
+                showMessage(message, error.message, true);
+            }
+        });
+
         qs('#personalityForm').addEventListener('submit', async function (event) {
             event.preventDefault();
             try {
@@ -62,11 +83,70 @@ document.addEventListener('DOMContentLoaded', function () {
                     method: 'POST',
                     body: JSON.stringify({ personality: personality.value })
                 });
+                updatedUser = Object.assign({}, getCurrentUser() || user, updatedUser);
                 saveCurrentUser(updatedUser);
+                updatePersonalitySummary(updatedUser.personality, false);
                 showMessage(message, 'Profile updated');
             } catch (error) {
                 showMessage(message, error.message, true);
             }
         });
+    }
+
+    function renderProfileAvatar(profile) {
+        var avatarSrc = getProfileAvatarSrc(profile);
+        if (avatarSrc) {
+            avatarEl.textContent = '';
+            avatarEl.style.background = 'rgba(255, 255, 255, .82)';
+            avatarEl.style.overflow = 'hidden';
+            avatarEl.style.padding = '8px';
+            avatarEl.innerHTML = '<img src="' + avatarSrc + '" alt="Selected avatar" style="width:100%;height:100%;object-fit:contain;display:block;">';
+        } else {
+            var initial = (user.name || '?').trim().charAt(0).toUpperCase();
+            avatarEl.textContent = initial;
+            avatarEl.style.background = isTeacher
+                ? 'linear-gradient(135deg, #312e81, var(--violet-600))'
+                : 'linear-gradient(135deg, #042f2e, var(--teal-500))';
+        }
+    }
+
+    function selectCurrentAvatar(profile) {
+        if (!profile || !profile.avatar) {
+            return;
+        }
+        var selected = qs('input[name="avatar"][value="' + profile.avatar + '"]');
+        if (selected) {
+            selected.checked = true;
+        }
+    }
+
+    function getProfileAvatarSrc(profile) {
+        if (profile && profile.avatar) {
+            return '../assets/images/avatars/' + profile.avatar;
+        }
+        var normalizedName = (profile && profile.name ? profile.name : '').trim().toLowerCase();
+        if (normalizedName === 'student_alice' || normalizedName === 'alice') {
+            return '../assets/images/avatars/alice-kitty.png';
+        }
+        if (normalizedName === 'student_bob' || normalizedName === 'bob') {
+            return '../assets/images/avatars/bob-drawing.png';
+        }
+        return '';
+    }
+
+    function updatePersonalitySummary(personality, teacher) {
+        if (teacher) {
+            qs('#profilePersonalitySummary').textContent = 'Teacher';
+            return;
+        }
+        if (personality === 'E') {
+            qs('#profilePersonalitySummary').textContent = 'E - Extrovert';
+            return;
+        }
+        if (personality === 'I') {
+            qs('#profilePersonalitySummary').textContent = 'I - Introvert';
+            return;
+        }
+        qs('#profilePersonalitySummary').textContent = 'Not selected';
     }
 });

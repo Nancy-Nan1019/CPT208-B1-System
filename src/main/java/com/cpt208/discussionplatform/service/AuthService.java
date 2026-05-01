@@ -35,6 +35,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setName(request.getName());
         user.setRole(request.getRole());
+        user.setAvatar(normalizeAvatar(request.getAvatar()));
         User savedUser = userRepository.save(user);
         return toAuthResponse(savedUser);
     }
@@ -78,6 +79,24 @@ public class AuthService {
         response.setName(user.getName());
         response.setRole(user.getRole());
         response.setPersonality(user.getPersonality());
+        response.setAvatar(user.getAvatar());
         return response;
+    }
+
+    private String normalizeAvatar(String avatar) {
+        if (avatar == null) {
+            return null;
+        }
+        switch (avatar) {
+            case "bat.png":
+            case "bird.png":
+            case "fox.png":
+            case "giraffe.png":
+            case "drawing.png":
+            case "kitty.png":
+                return avatar;
+            default:
+                return null;
+        }
     }
 }
