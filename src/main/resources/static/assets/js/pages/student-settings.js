@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     qs('#profileNameSummary').textContent = user.name || '-';
     qs('#profileEmailSummary').textContent = user.email || '-';
     updatePersonalitySummary(user.personality, isTeacher);
+    updateCoinSummary(isTeacher ? null : 'Loading...');
 
     var badge = qs('#profileRoleBadge');
     badge.textContent = isTeacher ? 'Teacher' : 'Student';
@@ -27,11 +28,16 @@ document.addEventListener('DOMContentLoaded', function () {
     if (isTeacher) {
         qs('#avatarSection').style.display = 'none';
         qs('#personalitySection').style.display = 'none';
+        updateCoinSummary('-');
     } else if (user.personality) {
         var selected = document.querySelector('input[name="personality"][value="' + user.personality + '"]');
         if (selected) {
             selected.checked = true;
         }
+    }
+
+    if (!isTeacher) {
+        loadProfileCoins();
     }
 
     qs('#backButton').addEventListener('click', function () {
@@ -148,5 +154,42 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
         qs('#profilePersonalitySummary').textContent = 'Not selected';
+    }
+
+    async function loadProfileCoins() {
+        try {
+            var sessions = await apiRequest('/students/my-sessions');
+            var totalCoins = 0;
+            (sessions || []).forEach(function (session) {
+                totalCoins += calculateRoundCoins(session.totalSpeakingSeconds || 0, session.durationMinutes || 0);
+            });
+            updateCoinSummary(totalCoins);
+        } catch (error) {
+            updateCoinSummary('-');
+            console.error(error);
+        }
+    }
+
+    function calculateRoundCoins(score, durationMinutes) {
+        if (!durationMinutes) {
+            return 0;
+        }
+        var sessionDurationSeconds = Math.max(1, durationMinutes * 60);
+        var progress = Math.max(0, Math.min(100, ((score || 0) / sessionDurationSeconds) * 100));
+        var passedFlags = [20, 40, 60, 80].filter(function (checkpoint) {
+            return progress >= checkpoint;
+        }).length;
+        return passedFlags * 10;
+    }
+
+    function updateCoinSummary(value) {
+        var coinSummary = qs('#profileCoinsSummary');
+        if (!coinSummary) {
+            return;
+        }
+        var textNode = coinSummary.querySelector('span');
+        if (textNode) {
+            textNode.textContent = value === null ? '-' : value;
+        }
     }
 });

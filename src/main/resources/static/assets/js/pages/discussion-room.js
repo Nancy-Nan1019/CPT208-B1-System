@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var speakingTimeline = [];
     var speakingStartTimes = {};
     var speakCountMap = {};
+    var raceCoinMilestones = {};
     var avatarPool = [
         '../assets/images/icons/bat.svg',
         '../assets/images/icons/bird.svg',
@@ -549,11 +550,29 @@ document.addEventListener('DOMContentLoaded', function () {
         var totalDuration = sessionDurationSeconds || 1;
         if (!safeMembers.length) {
             container.innerHTML = '<div class="panel-empty">No racers yet.</div>';
+            updateCurrentRaceCoins([], totalDuration);
             return;
         }
+        var pendingCoinPopups = [];
         container.innerHTML = safeMembers.map(function (member) {
             var score = member.score || 0;
             var progress = Math.max(2, Math.min(100, Math.round((score / totalDuration) * 1000) / 10));
+            var coins = calculateRaceCoins(progress);
+            var flagCount = calculatePassedFlagCount(progress);
+            var previousFlagCount = raceCoinMilestones[member.userId];
+            if (previousFlagCount === undefined) {
+                raceCoinMilestones[member.userId] = flagCount;
+            } else if (flagCount > previousFlagCount) {
+                for (var flagIndex = previousFlagCount + 1; flagIndex <= flagCount; flagIndex++) {
+                    pendingCoinPopups.push({
+                        userId: member.userId,
+                        checkpoint: [20, 40, 60, 80][flagIndex - 1]
+                    });
+                }
+                raceCoinMilestones[member.userId] = flagCount;
+            } else if (flagCount < previousFlagCount) {
+                raceCoinMilestones[member.userId] = flagCount;
+            }
             return '<div class="race-row" data-user-id="' + member.userId + '">' +
                 '<div class="race-runner-meta">' +
                 buildAvatarHtml(member.userId, member.name, member.personality, 34) +
@@ -561,6 +580,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<div class="race-runner-name">' + escapeText(member.name || '') + '</div>' +
                 '<div class="race-runner-score">' + score + 's / ' + totalDuration + 's</div>' +
                 '</div>' +
+                '<div class="race-coin-badge" title="Coins earned from flags"><img src="../assets/images/playful/star-coin.png" alt=""> ' + coins + '</div>' +
                 '</div>' +
                 '<div class="race-lane">' +
                 '<div class="race-lane-line"></div>' +
@@ -579,6 +599,49 @@ document.addEventListener('DOMContentLoaded', function () {
                 '</div>' +
                 '</div>';
         }).join('');
+        showRaceCoinPopups(pendingCoinPopups);
+        updateCurrentRaceCoins(safeMembers, totalDuration);
+    }
+
+    function calculateRaceCoins(progress) {
+        return calculatePassedFlagCount(progress) * 10;
+    }
+
+    function calculatePassedFlagCount(progress) {
+        return [20, 40, 60, 80].filter(function (checkpoint) {
+            return progress >= checkpoint;
+        }).length;
+    }
+
+    function showRaceCoinPopups(popups) {
+        (popups || []).forEach(function (popup) {
+            var row = document.querySelector('.race-row[data-user-id="' + popup.userId + '"]');
+            var lane = row ? row.querySelector('.race-lane') : null;
+            if (!lane) {
+                return;
+            }
+            var node = document.createElement('div');
+            node.className = 'race-coin-popup';
+            node.style.left = popup.checkpoint + '%';
+            node.innerHTML = '<img src="../assets/images/playful/coin.png" alt=""> <span>+10</span>';
+            lane.appendChild(node);
+            window.setTimeout(function () {
+                node.remove();
+            }, 1300);
+        });
+    }
+
+    function updateCurrentRaceCoins(members, totalDuration) {
+        var coinNode = qs('#raceCurrentCoins');
+        if (!coinNode) {
+            return;
+        }
+        var current = (members || []).find(function (member) {
+            return Number(member.userId) === Number(user.id);
+        });
+        var score = current ? (current.score || 0) : 0;
+        var progress = Math.max(0, Math.min(100, Math.round((score / (totalDuration || 1)) * 1000) / 10));
+        coinNode.querySelector('span').textContent = calculateRaceCoins(progress);
     }
     function applyStagger(container) {
         if (container.dataset.staggerApplied) return;

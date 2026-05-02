@@ -617,6 +617,26 @@ label:has(input:checked) {
     word-break: break-word;
 }
 
+.profile-coin-item {
+    background: linear-gradient(135deg, rgba(255, 248, 220, .84), rgba(255, 255, 255, .72));
+    border-color: rgba(245, 184, 58, .28);
+}
+
+.profile-coin-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #8a5a08;
+    font-weight: 900;
+}
+
+.profile-coin-value img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: block;
+}
+
 .profile-avatar-grid {
     grid-template-columns: repeat(6, minmax(0, 1fr));
 }

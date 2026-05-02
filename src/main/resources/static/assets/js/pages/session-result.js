@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         window.location.href = './login.html';
         return;
     }
+    setResultMapPlayerAvatar(user);
 
     var headerEl = document.querySelector('.page-header');
     if (headerEl) {
@@ -59,16 +60,24 @@ document.addEventListener('DOMContentLoaded', async function () {
         var groups = data.groups || [];
         var totalParticipants = 0;
         var totalSpeaking = 0;
+        var sessionDurationSeconds = Math.max(1, (data.durationMinutes || 0) * 60);
+        var myRoundCoins = 0;
         groups.forEach(function (group) {
             var members = group.members || [];
             totalParticipants += members.length;
-            members.forEach(function (m) { totalSpeaking += (m.score || 0); });
+            members.forEach(function (m) {
+                totalSpeaking += (m.score || 0);
+                if (Number(m.userId) === Number(user.id)) {
+                    myRoundCoins = calculateRoundCoins(m.score || 0, sessionDurationSeconds);
+                }
+            });
         });
 
         var summaryHtml =
             '<div class="stat-card"><div class="stat-label">Groups</div><div class="stat-value">' + groups.length + '</div><div class="stat-note">Discussion groups in this session</div></div>' +
             '<div class="stat-card"><div class="stat-label">Participants</div><div class="stat-value">' + totalParticipants + '</div><div class="stat-note">Students included in the result</div></div>' +
             '<div class="stat-card"><div class="stat-label">Speaking</div><div class="stat-value">' + totalSpeaking + 's</div><div class="stat-note">Total speaking time recorded</div></div>' +
+            '<div class="stat-card result-coin-summary"><div class="stat-label">Round Coins</div><div class="stat-value"><img src="../assets/images/playful/star-coin.png" alt=""> ' + myRoundCoins + '</div><div class="stat-note">Coins you earned in this session</div></div>' +
             '<div class="stat-card"><div class="stat-label">Started</div><div class="stat-value result-summary-time">' + (data.startedAt ? new Date(data.startedAt).toLocaleString() : '-') + '</div><div class="stat-note">Session end: ' + (data.endedAt ? new Date(data.endedAt).toLocaleString() : '-') + '</div></div>';
         qs('#resultSummaryContent').innerHTML = summaryHtml;
         qs('#resultSummary').style.display = '';
@@ -120,8 +129,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '<div class="result-member-bars">' +
                 (members.map(function (member) {
                     var pct = groupTotal ? Math.max(4, Math.round(((member.score || 0) / groupTotal) * 100)) : 4;
+                    var coins = calculateRoundCoins(member.score || 0, sessionDurationSeconds);
                     return '<div class="result-member-row">' +
-                        '<div class="result-member-head"><span>' + escapeText(member.name || '') + '</span><span>' + (member.score || 0) + 's</span></div>' +
+                        '<div class="result-member-head"><span>' + escapeText(member.name || '') + '</span><span class="result-member-stats"><span>' + (member.score || 0) + 's</span><span class="result-coin-badge"><img src="../assets/images/playful/star-coin.png" alt=""> ' + coins + '</span></span></div>' +
                         '<div class="monitor-heat-bar"><div class="monitor-heat-fill" style="width:' + pct + '%;background:linear-gradient(90deg, rgba(59,130,246,.95), rgba(139,92,246,.58));"></div></div>' +
                         '</div>';
                 }).join('') || '<div class="panel-empty">No members</div>') +
@@ -141,5 +151,22 @@ document.addEventListener('DOMContentLoaded', async function () {
             children[i].classList.add('stagger-in');
             children[i].style.animationDelay = (i * 40) + 'ms';
         }
+    }
+
+    function calculateRoundCoins(score, sessionDurationSeconds) {
+        var progress = Math.max(0, Math.min(100, ((score || 0) / (sessionDurationSeconds || 1)) * 100));
+        var passedFlags = [20, 40, 60, 80].filter(function (checkpoint) {
+            return progress >= checkpoint;
+        }).length;
+        return passedFlags * 10;
+    }
+
+    function setResultMapPlayerAvatar(profile) {
+        var player = qs('#resultMapPlayer');
+        if (!player) {
+            return;
+        }
+        var avatar = profile && profile.avatar ? profile.avatar : 'kitty.png';
+        player.src = '../assets/images/avatars/' + avatar;
     }
 });

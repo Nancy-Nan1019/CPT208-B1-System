@@ -70,6 +70,16 @@
                 </div>
             </div>
             <div id="loginBubble" class="card stack login-card">
+                <div class="login-audience-switch" role="tablist" aria-label="Choose login portal">
+                    <button class="login-audience-tab active" type="button" data-audience="STUDENT" role="tab" aria-selected="true">
+                        <span aria-hidden="true">🎒</span>
+                        Student
+                    </button>
+                    <button class="login-audience-tab" type="button" data-audience="TEACHER" role="tab" aria-selected="false">
+                        <span aria-hidden="true">📚</span>
+                        Teacher
+                    </button>
+                </div>
                 <h1 id="pageTitle">Login</h1>
                 <div id="loginCardSubtitle" class="login-card-subtitle">Sign in to continue your live discussion session.</div>
                 <form id="loginForm" class="stack login-form">
@@ -84,13 +94,6 @@
                     <div class="form-group">
                         <label class="form-label" for="password">Password</label>
                         <input id="password" class="input" type="password" placeholder="At least 6 characters" required minlength="6">
-                    </div>
-                    <div id="roleRow" class="form-group" style="display:none;">
-                        <label class="form-label" for="role">Role</label>
-                        <select id="role" class="input">
-                            <option value="STUDENT">Student</option>
-                            <option value="TEACHER">Teacher</option>
-                        </select>
                     </div>
                     <div id="avatarRow" class="form-group login-avatar-row" style="display:none;">
                         <div class="form-label">Avatar</div>

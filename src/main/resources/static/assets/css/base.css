@@ -670,6 +670,50 @@ body.login-page.login-started .login-bottom-omi {
     color: #46516f;
 }
 
+.login-audience-switch {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 6px;
+    border-radius: 22px;
+    background: rgba(235, 241, 255, .74);
+    border: 1px solid rgba(191, 205, 237, .74);
+    box-shadow: 0 12px 28px rgba(124, 142, 209, .09);
+}
+
+.login-audience-tab {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 0;
+    border-radius: 17px;
+    background: transparent;
+    color: #667394;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease, color 160ms ease;
+}
+
+.login-audience-tab:hover {
+    transform: translateY(-1px);
+    color: #3d4d75;
+}
+
+.login-audience-tab.active {
+    background: linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(232, 244, 255, .9));
+    color: #2f5ed7;
+    box-shadow: 0 10px 22px rgba(91, 124, 248, .14), inset 0 1px 0 rgba(255, 255, 255, .8);
+}
+
+.login-audience-tab span {
+    font-size: 18px;
+    line-height: 1;
+}
+
 .login-card-subtitle {
     margin-top: -6px;
     color: rgba(96, 107, 157, .86);

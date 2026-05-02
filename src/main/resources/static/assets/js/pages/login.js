@@ -11,7 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const message = qs('#message');
     const ideaIcon = qs('#omiIdeaIcon');
     const dropZone = qs('#omiDropZone');
+    const audienceTabs = qsa('.login-audience-tab');
     let mode = 'login';
+    let audience = 'STUDENT';
 
     function revealOmiIntro() {
         if (document.body.classList.contains('omi-intro-ready')) {
@@ -111,21 +113,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    audienceTabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            audience = tab.getAttribute('data-audience') || 'STUDENT';
+            updateAudienceTabs();
+            updateAuthView();
+        });
+    });
+
     toggle.addEventListener('click', function () {
         mode = mode === 'login' ? 'register' : 'login';
-        title.textContent = mode === 'login' ? 'Login' : 'Register';
-        subtitle.textContent = mode === 'login'
-            ? 'Sign in to continue your live discussion session.'
-            : 'Create your profile and choose an avatar for discussion.';
-        submitText.textContent = mode === 'login' ? 'Login' : 'Register';
-        submit.querySelector('.btn-icon').textContent = mode === 'login' ? '\uD83D\uDE80' : '\u2728';
-        qs('#nameRow').style.display = mode === 'register' ? 'block' : 'none';
-        qs('#name').required = mode === 'register';
-        qs('#roleRow').style.display = mode === 'register' ? 'block' : 'none';
-        qs('#avatarRow').style.display = mode === 'register' ? 'block' : 'none';
-        toggleText.textContent = mode === 'login' ? 'No account? Register' : 'Already have an account? Login';
-        toggle.querySelector('.btn-icon').textContent = mode === 'login' ? '\u270F\uFE0F' : '\uD83D\uDD11';
+        updateAuthView();
     });
+
+    updateAuthView();
 
     form.addEventListener('submit', async function (event) {
         event.preventDefault();
@@ -137,9 +138,11 @@ document.addEventListener('DOMContentLoaded', function () {
             let data;
             if (mode === 'register') {
                 payload.name = qs('#name').value.trim();
-                payload.role = qs('#role').value;
-                var selectedAvatar = qs('input[name="avatar"]:checked');
-                payload.avatar = selectedAvatar ? selectedAvatar.value : 'kitty.png';
+                payload.role = audience;
+                if (audience === 'STUDENT') {
+                    var selectedAvatar = qs('input[name="avatar"]:checked');
+                    payload.avatar = selectedAvatar ? selectedAvatar.value : 'kitty.png';
+                }
                 data = await apiRequest('/auth/register', {
                     method: 'POST',
                     body: JSON.stringify(payload)
@@ -151,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
             saveAccessToken(data.accessToken);
-            if (mode === 'register' && data.user && !data.user.avatar) {
+            if (mode === 'register' && audience === 'STUDENT' && data.user && !data.user.avatar) {
                 data.user.avatar = payload.avatar;
             }
             saveCurrentUser(data.user);
@@ -169,4 +172,28 @@ document.addEventListener('DOMContentLoaded', function () {
             showMessage(message, error.message, true);
         }
     });
+
+    function updateAudienceTabs() {
+        audienceTabs.forEach(function (tab) {
+            var isActive = tab.getAttribute('data-audience') === audience;
+            tab.classList.toggle('active', isActive);
+            tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+    }
+
+    function updateAuthView() {
+        var isStudent = audience === 'STUDENT';
+        var isRegister = mode === 'register';
+        title.textContent = (isStudent ? 'Student' : 'Teacher') + ' ' + (isRegister ? 'Register' : 'Login');
+        subtitle.textContent = isRegister
+            ? (isStudent ? 'Create your student profile and choose an avatar for discussion.' : 'Create your teacher account to manage live discussion sessions.')
+            : (isStudent ? 'Sign in to join your live discussion session.' : 'Sign in to manage sessions, groups, and results.');
+        submitText.textContent = isRegister ? 'Register' : 'Login';
+        submit.querySelector('.btn-icon').textContent = isRegister ? '\u2728' : '\uD83D\uDE80';
+        qs('#nameRow').style.display = isRegister ? 'block' : 'none';
+        qs('#name').required = isRegister;
+        qs('#avatarRow').style.display = isRegister && isStudent ? 'block' : 'none';
+        toggleText.textContent = isRegister ? 'Already have an account? Login' : 'No account? Register';
+        toggle.querySelector('.btn-icon').textContent = isRegister ? '\uD83D\uDD11' : '\u270F\uFE0F';
+    }
 });

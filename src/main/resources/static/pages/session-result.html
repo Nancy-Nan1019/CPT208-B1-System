@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../assets/css/animations.css">
     <link rel="stylesheet" href="../assets/css/responsive.css">
 </head>
-<body>
+<body class="session-result-page">
 <div class="page-header">
     <div class="container">
         <div class="header-shell">
@@ -37,6 +37,38 @@
     <div class="container result-layout">
         <div id="resultSummary" style="display:none;">
             <div id="resultSummaryContent" class="dashboard-stats"></div>
+        </div>
+        <div class="card stack result-map-card">
+            <div class="card-header">
+                <div class="stack" style="gap:6px;">
+                    <div class="card-kicker">Quest Complete</div>
+                    <h2>Session Journey</h2>
+                    <div class="card-subtitle">Your discussion route ends here with the final result view.</div>
+                </div>
+            </div>
+            <div class="result-map-viewport" aria-hidden="true">
+                <svg class="result-map-track" viewBox="0 0 920 180">
+                    <path class="result-map-track-shadow" d="M22 126 C150 46 278 18 408 82 S610 158 898 56"></path>
+                    <path class="result-map-track-main" d="M22 126 C150 46 278 18 408 82 S610 158 898 56"></path>
+                </svg>
+                <img id="resultMapPlayer" class="result-map-player" src="../assets/images/avatars/kitty.png" alt="">
+                <div class="result-map-stage result-map-stage-one complete">
+                    <span>1</span>
+                    <strong>Pick Session</strong>
+                </div>
+                <div class="result-map-stage result-map-stage-two complete">
+                    <span>2</span>
+                    <strong>Waiting Room</strong>
+                </div>
+                <div class="result-map-stage result-map-stage-three complete">
+                    <span>3</span>
+                    <strong>Discussion Room</strong>
+                </div>
+                <div class="result-map-stage result-map-stage-four current">
+                    <span>4</span>
+                    <strong>View Result</strong>
+                </div>
+            </div>
         </div>
         <div class="result-grid">
             <div class="result-main">

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     var cachedSessions = [];
     var sessionMetaMap = {};
     qs('#userName').textContent = user.name;
+    setWaitingMapPlayerAvatar(user);
     var openSessionIds = await loadOpenSessions();
     var rememberedSessionId = storage.get('joinedSessionId');
     if (rememberedSessionId && openSessionIds.indexOf(rememberedSessionId) === -1) {
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         qs('#sessionSelect').value = String(rememberedSessionId);
         refreshParticipantCount(rememberedSessionId);
     }
+    initWaitingMap();
     updateButtonState();
     updateLobbyProgress(!!rememberedSessionId, false);
 
@@ -339,6 +341,130 @@ document.addEventListener('DOMContentLoaded', async function () {
             steps[2].classList.add('active');
         } else if (joined && steps[2]) {
             steps[2].classList.add('current');
+        }
+
+        var stages = qsa('.waiting-map-stage');
+        for (var j = 0; j < stages.length; j++) {
+            stages[j].classList.remove('active', 'current');
+        }
+        if (stages[0]) {
+            stages[0].classList.add('active');
+        }
+        if (joined && stages[1]) {
+            stages[1].classList.add('active');
+        }
+        if (ready && stages[2]) {
+            stages[2].classList.add('active');
+        } else if (joined && stages[2]) {
+            stages[2].classList.add('current');
+        }
+
+        var player = qs('#waitingMapPlayer');
+        if (player) {
+            player.classList.remove('stage-1', 'stage-2', 'stage-3', 'stage-4');
+            player.classList.add(ready ? 'stage-3' : joined ? 'stage-2' : 'stage-1');
+        }
+    }
+
+    function setWaitingMapPlayerAvatar(profile) {
+        var player = qs('#waitingMapPlayer');
+        if (!player) {
+            return;
+        }
+        player.src = '../assets/images/avatars/' + resolveAvatarFile(profile);
+    }
+
+    function resolveAvatarFile(profile) {
+        if (profile && profile.avatar) {
+            return profile.avatar;
+        }
+        if (profile && profile.name === 'Student_Alice') {
+            return 'alice-kitty.png';
+        }
+        if (profile && profile.name === 'Student_Bob') {
+            return 'bob-drawing.png';
+        }
+        return 'kitty.png';
+    }
+
+    function initWaitingMap() {
+        var viewport = qs('#waitingMapViewport');
+        var canvas = qs('#waitingMapCanvas');
+        var zoomInBtn = qs('#waitingMapZoomIn');
+        var zoomOutBtn = qs('#waitingMapZoomOut');
+        var resetBtn = qs('#waitingMapReset');
+        if (!viewport || !canvas || !zoomInBtn || !zoomOutBtn || !resetBtn) {
+            return;
+        }
+
+        var mapWidth = 760;
+        var fitScale = Math.min(1, Math.max(0.68, (viewport.clientWidth - 20) / mapWidth));
+        var state = {
+            scale: fitScale,
+            minScale: 0.68,
+            maxScale: 1.65,
+            x: Math.round((viewport.clientWidth - mapWidth * fitScale) / 2),
+            y: 0
+        };
+        var drag = null;
+
+        applyTransform();
+
+        viewport.addEventListener('pointerdown', function (event) {
+            drag = {
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startY: event.clientY,
+                originX: state.x,
+                originY: state.y
+            };
+            viewport.classList.add('dragging');
+            viewport.setPointerCapture(event.pointerId);
+        });
+
+        viewport.addEventListener('pointermove', function (event) {
+            if (!drag || drag.pointerId !== event.pointerId) {
+                return;
+            }
+            state.x = drag.originX + (event.clientX - drag.startX);
+            state.y = drag.originY + (event.clientY - drag.startY);
+            applyTransform();
+        });
+
+        viewport.addEventListener('pointerup', finishDrag);
+        viewport.addEventListener('pointercancel', finishDrag);
+
+        zoomInBtn.addEventListener('click', function () {
+            setScale(state.scale + 0.12);
+        });
+
+        zoomOutBtn.addEventListener('click', function () {
+            setScale(state.scale - 0.12);
+        });
+
+        resetBtn.addEventListener('click', function () {
+            fitScale = Math.min(1, Math.max(0.68, (viewport.clientWidth - 20) / mapWidth));
+            state.scale = fitScale;
+            state.x = Math.round((viewport.clientWidth - mapWidth * fitScale) / 2);
+            state.y = 0;
+            applyTransform();
+        });
+
+        function finishDrag(event) {
+            if (!drag || drag.pointerId !== event.pointerId) {
+                return;
+            }
+            viewport.classList.remove('dragging');
+            drag = null;
+        }
+
+        function setScale(nextScale) {
+            state.scale = Math.max(state.minScale, Math.min(state.maxScale, nextScale));
+            applyTransform();
+        }
+
+        function applyTransform() {
+            canvas.style.transform = 'translate(' + state.x + 'px, ' + state.y + 'px) scale(' + state.scale + ')';
         }
     }
 

@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../assets/css/animations.css">
     <link rel="stylesheet" href="../assets/css/responsive.css">
 </head>
-<body>
+<body class="waiting-room-page">
 <div class="page-header page-header-student">
     <div class="container">
         <div class="header-shell">
@@ -76,6 +76,15 @@
                 <div id="sessionPreviewList" class="waiting-session-list"></div>
                 <button id="viewAllSessionsBtn" class="btn btn-outline waiting-view-all-btn" type="button" style="display:none;">View All Sessions</button>
             </div>
+            <div class="card stack waiting-lobby-board-card">
+                <div class="card-header">
+                    <div class="stack" style="gap:6px;">
+                        <div class="card-kicker">Status</div>
+                        <h2>Lobby Board</h2>
+                    </div>
+                </div>
+                <div id="waitingStats" class="detail-metric-grid"></div>
+            </div>
         </div>
         <div class="waiting-side">
             <div id="rejoinCard" class="card stack" style="display:none;">
@@ -89,14 +98,48 @@
                 <div id="rejoinMessage" class="card-subtitle">Your discussion room is ready to enter.</div>
                 <button id="rejoinDiscussionButton" class="btn btn-outline" type="button">Rejoin Discussion</button>
             </div>
-            <div class="card stack">
+            <div class="card stack waiting-map-card">
                 <div class="card-header">
                     <div class="stack" style="gap:6px;">
-                        <div class="card-kicker">Status</div>
-                        <h2>Lobby Board</h2>
+                        <div class="card-kicker">Quest Map</div>
+                        <h2>Mission Route</h2>
+                        <div class="card-subtitle">Drag the map, zoom in, and follow your four-step discussion journey.</div>
+                    </div>
+                    <div class="waiting-map-controls">
+                        <button id="waitingMapZoomOut" class="btn btn-outline waiting-map-control-btn" type="button" aria-label="Zoom out">-</button>
+                        <button id="waitingMapReset" class="btn btn-outline waiting-map-control-btn" type="button" aria-label="Reset map">o</button>
+                        <button id="waitingMapZoomIn" class="btn btn-outline waiting-map-control-btn" type="button" aria-label="Zoom in">+</button>
                     </div>
                 </div>
-                <div id="waitingStats" class="detail-metric-grid"></div>
+                <div id="waitingMapViewport" class="waiting-map-viewport">
+                    <div id="waitingMapCanvas" class="waiting-map-canvas">
+                        <svg class="waiting-map-track" viewBox="0 0 720 240" aria-hidden="true">
+                            <path class="waiting-map-track-shadow" d="M48 172 C146 70 246 56 340 118 S512 196 672 76"></path>
+                            <path class="waiting-map-track-main" d="M48 172 C146 70 246 56 340 118 S512 196 672 76"></path>
+                        </svg>
+                        <div class="waiting-map-glow waiting-map-glow-one"></div>
+                        <div class="waiting-map-glow waiting-map-glow-two"></div>
+                        <div class="waiting-map-glow waiting-map-glow-three"></div>
+                        <div class="waiting-map-glow waiting-map-glow-four"></div>
+                        <img id="waitingMapPlayer" class="waiting-map-player" src="../assets/images/avatars/kitty.png" alt="Your avatar">
+                        <div class="waiting-map-stage waiting-map-stage-one">
+                            <span class="waiting-map-stage-badge">1</span>
+                            <strong>Pick Session</strong>
+                        </div>
+                        <div class="waiting-map-stage waiting-map-stage-two">
+                            <span class="waiting-map-stage-badge">2</span>
+                            <strong>Join Waiting Room</strong>
+                        </div>
+                        <div class="waiting-map-stage waiting-map-stage-three">
+                            <span class="waiting-map-stage-badge">3</span>
+                            <strong>Enter Discussion</strong>
+                        </div>
+                        <div class="waiting-map-stage waiting-map-stage-four">
+                            <span class="waiting-map-stage-badge">4</span>
+                            <strong>View Result</strong>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card stack">
                 <div class="card-header">
@@ -107,8 +150,9 @@
                 </div>
                 <div id="waitingProgress" class="waiting-progress-path">
                     <div class="waiting-path-step active"><span>1</span><div>Pick Session</div></div>
-                    <div class="waiting-path-step"><span>2</span><div>Save Seat</div></div>
-                    <div class="waiting-path-step"><span>3</span><div>Meet Group</div></div>
+                    <div class="waiting-path-step"><span>2</span><div>Waiting Room</div></div>
+                    <div class="waiting-path-step"><span>3</span><div>Discussion Room</div></div>
+                    <div class="waiting-path-step"><span>4</span><div>View Result</div></div>
                 </div>
             </div>
         </div>

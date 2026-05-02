@@ -16,7 +16,8 @@
             '<button id="floatingAiClose" class="floating-ai-close" type="button" aria-label="Close AI assistant">x</button>' +
             '</div>' +
             '<div id="floatingAiMessages" class="floating-ai-messages">' +
-            "<div class=\"floating-ai-message bot\">I'm Omi, your helper in OpenMind.</div>" +
+            "<div class=\"floating-ai-message bot\">I'm Omi, your helper in OpenMind. I can stay with you while you explore sessions, groups, profiles, speaking logs, and results.</div>" +
+            "<div class=\"floating-ai-message bot\">Ask me what to do next, where to find something, or how a page works.</div>" +
             '</div>' +
             '<form id="floatingAiForm" class="floating-ai-form">' +
             '<input id="floatingAiInput" class="floating-ai-input" maxlength="600" placeholder="Ask a question..." autocomplete="off">' +
