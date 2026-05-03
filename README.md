@@ -1,7 +1,7 @@
 # OpenMind Discussion Platform
 
 An interactive web application for classroom group discussion, designed for the CPT208 Human-Centric Computing project.  
-The system supports teacher-led discussion sessions, balanced group formation, real-time participation tracking, AI-based discussion guidance, and session analytics in a high-fidelity responsive interface.
+The system supports teacher-led discussion sessions, balanced group formation, real-time participation tracking, AI-based discussion guidance, user profiles and avatars, speaking logs, rejoin flows, and session analytics in a high-fidelity responsive interface.
 
 ## Live Demo
 
@@ -17,8 +17,18 @@ The system supports teacher-led discussion sessions, balanced group formation, r
 This project is a real interactive system rather than a static mock-up:
 - users can register and log in
 - teachers can create, group, start, monitor, and end discussion sessions
-- students can join, participate, request AI guidance, and review results
+- students can join, participate, request AI guidance, review results, and rejoin active rooms
 - the UI updates through APIs and real-time WebSocket messages
+
+## Recent Feature Additions
+
+The latest development work added several production-style features on top of the earlier baseline:
+- student profile pages with avatar selection and personality updates
+- a floating Omi AI assistant available across authenticated pages
+- speaking-log history and full-session log views in the discussion room
+- waiting-room rejoin support after grouping is ready
+- richer teacher analytics with group, individual, and timeline views
+- upgraded result pages with balance analysis and coin-style participation rewards
 
 ## Project Goals
 
@@ -77,13 +87,36 @@ Relevant implementation:
 ### 4. Teacher Monitoring and Session Analytics
 
 - Teachers can monitor live discussion progress across groups.
-- The system provides session overview, speaking timeline, alerts, participation insights, and end-of-session results.
+- The system provides session overview, speaking timeline, silent-group alerts, participation insights, and end-of-session results.
 - Results can be exported as CSV.
 
 Relevant implementation:
 - [teacher-session.html](src/main/resources/static/pages/teacher-session.html)
 - [teacher-session.js](src/main/resources/static/assets/js/pages/teacher-session.js)
 - [TeacherController.java](src/main/java/com/cpt208/discussionplatform/controller/TeacherController.java)
+
+### 5. User Profiles, Avatars, and Speaking History
+
+- Students can update their avatar and personality after registration.
+- Profile pages show identity, personality, avatar, and session coin summaries.
+- The waiting room and discussion room preserve user state so learners can return to the correct session after temporary navigation.
+- Speaking logs are visible in the discussion room and the session result page.
+
+Relevant implementation:
+- [student-settings.js](src/main/resources/static/assets/js/pages/student-settings.js)
+- [waiting-room.js](src/main/resources/static/assets/js/pages/waiting-room.js)
+- [discussion-room.js](src/main/resources/static/assets/js/pages/discussion-room.js)
+- [session-result.js](src/main/resources/static/assets/js/pages/session-result.js)
+
+### 6. Floating Omi Assistant
+
+- An Omi assistant widget is available on authenticated pages for quick guidance.
+- Users can ask where to find features, what to do next, or how a page works.
+- The assistant is draggable and remembers its position locally.
+
+Relevant implementation:
+- [ai-assistant.js](src/main/resources/static/assets/js/common/ai-assistant.js)
+- [AiChatController.java](src/main/java/com/cpt208/discussionplatform/controller/AiChatController.java)
 
 ## User Experience and Interface
 
@@ -116,12 +149,12 @@ Main UI files:
 ### Student Flow
 
 1. Register or log in as a student.
-2. Choose a personality type on first login.
+2. Choose a personality type on first login and optionally update the avatar in the profile page.
 3. Join an available discussion session in the waiting room.
 4. Check the allocated group and enter the discussion room.
 5. Use `Hold to Speak` to participate.
-6. Request AI guidance when needed.
-7. Review speaking results after the session ends.
+6. Request AI guidance or use the floating Omi assistant when needed.
+7. Review speaking logs, coins, and speaking results after the session ends.
 
 ## Responsive Design
 
@@ -139,6 +172,7 @@ Evidence in the codebase:
 - HTML5
 - CSS3
 - Vanilla JavaScript
+- ECharts for analytics visualisation
 
 ### Backend
 
@@ -161,6 +195,22 @@ Evidence in the codebase:
 See:
 - [pom.xml](pom.xml)
 - [application.yml](src/main/resources/application.yml)
+
+## Local Configuration
+
+The current `application.yml` supports environment-variable overrides for local development and deployment:
+- `DB_URL`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+- `REDIS_HOST`
+- `REDIS_PORT`
+- `REDIS_PASSWORD`
+- `JWT_SECRET`
+- `JWT_ACCESS_TOKEN_DAYS`
+- `CORS_ALLOWED_ORIGIN`
+- `DEEPSEEK_API_KEY`
+
+If these are not set, the app falls back to localhost-oriented defaults.
 
 ## AI Coding Logs
 
@@ -284,6 +334,8 @@ Then open:
 http://localhost:9527
 ```
 
+If you need to override the default local database or Redis settings, set the environment variables before starting the app.
+
 ### Alternative Run Method
 
 You can also run:
@@ -299,9 +351,9 @@ Main entry:
 This repository is currently structured as an integrated Spring Boot web application:
 - backend APIs and WebSocket services run in Spring Boot
 - static frontend pages are served from the same application
-- the system connects to remote MySQL and Redis services
+- the system reads MySQL, Redis, JWT, CORS, and AI settings from environment variables with local defaults in `application.yml`
 
-In the current project setup, MySQL and Redis are already deployed on remote servers, so local users do not need to install database services separately to run the application.
+In the current project setup, local development can use the default localhost values, while deployment can point to remote services by exporting the matching environment variables.
 
 This makes the current deployment model suitable for:
 - cloud virtual machines
