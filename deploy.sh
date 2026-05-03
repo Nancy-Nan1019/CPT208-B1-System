@@ -4,23 +4,23 @@ APP_NAME="discussion-platform"
 JAR_NAME="target/${APP_NAME}-1.0.0.jar"
 LOG_FILE="app.log"
 
-echo ">>> 停止旧进程..."
+echo ">>> Stopping old process..."
 PID=$(pgrep -f "${APP_NAME}.*\.jar")
 if [ -n "$PID" ]; then
     kill -9 $PID
-    echo "已终止进程: $PID"
+    echo "Terminated process: $PID"
     sleep 2
 else
-    echo "无运行中的进程"
+    echo "No running process found"
 fi
 
-echo ">>> Maven 打包（跳过测试）..."
+echo ">>> Maven packaging (skipping tests)..."
 mvn clean package -DskipTests
 if [ $? -ne 0 ]; then
-    echo "打包失败，终止部署"
+    echo "Packaging failed, terminating deployment"
     exit 1
 fi
 
-echo ">>> 后台启动..."
+echo ">>> Starting in background..."
 nohup java -jar $JAR_NAME > $LOG_FILE 2>&1 &
-echo "启动完成，PID: $!, 日志: $LOG_FILE"
+echo "Deployment completed, PID: $!, Log: $LOG_FILE"
