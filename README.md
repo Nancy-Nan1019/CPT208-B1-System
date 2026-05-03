@@ -20,6 +20,21 @@ This project is a real interactive system rather than a static mock-up:
 - students can join, participate, request AI guidance, review results, and rejoin active rooms
 - the UI updates through APIs and real-time WebSocket messages
 
+## Important Note for Assessors
+
+To use the discussion room correctly, the system requires at least:
+- `1 teacher account`
+- `2 student accounts`
+
+This is because the minimum discussion-group size is `2 students`.
+
+To demonstrate the full workflow successfully, please:
+- log in with one teacher and two student accounts at the same time
+- use different browser windows, different browsers, or incognito windows if needed
+- let both student accounts join the same session before the teacher starts grouping
+
+For step-by-step operating instructions, please also see [USER_GUIDE.md](USER_GUIDE.md).
+
 ## Recent Feature Additions
 
 The latest development work added several production-style features on top of the earlier baseline:
@@ -311,6 +326,7 @@ open-mind-system
 |     `- pages
 |- ai-logs
 |- pom.xml
+|- USER_GUIDE.md
 `- README.md
 ```
 
