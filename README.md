@@ -1,25 +1,25 @@
 ## Important Note for Assessors
 
 To use the discussion room correctly, the system requires at least:
-- `1 teacher account`
-- `2 student accounts`
+- **`1 teacher account`**
+- **`2 student accounts`**
 
 Example demo accounts:
 
 | Role | Email | Password | Personality |
 |---|---|---|---|
 | Teacher | `teacher@demo.com` | `123456` | None |
-| Student | `cpt208@demo.com` | `cpt208` | Extroverted | 
+| Student | `cpt208@demo.com` | `cpt208` | Extroverted |
 | Student | `bob@demo.com` | `123456` | Introverted |
 
-This is because the minimum discussion-group size is `2 students`.
+This is because the **minimum discussion-group size** is **`2 students`**.
 
 To demonstrate the full workflow successfully, please:
-- log in with one teacher and two student accounts at the same time
-- make sure student's personality in the same session is different (eg: contains one extroverted and one introverted -- for balanced participation)
-- use different browser windows, different browsers, or incognito windows if needed 
-- if error appears like "Request failed with status 401", please use incognito windows or clear localStorage (localStorage.clear()) in the browser Developer Tools. 
-- let both student accounts join the same session before the teacher starts grouping
+- **log in with one teacher account and two student accounts at the same time**
+- **make sure the two students in the same session have different personality types**, for example, **one Extroverted and one Introverted**, to support more balanced participation
+- use different browser windows, different browsers, or incognito windows if needed
+- if an error appears such as **`Request failed with status 401`**, please use incognito windows or clear `localStorage` with `localStorage.clear()` in the browser Developer Tools
+- **let both student accounts join the same session before the teacher starts grouping**
 
 For step-by-step operating instructions, please also see [USER_GUIDE.md](USER_GUIDE.md).
 
