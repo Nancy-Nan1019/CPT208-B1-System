@@ -1,3 +1,28 @@
+## Important Note for Assessors
+
+To use the discussion room correctly, the system requires at least:
+- `1 teacher account`
+- `2 student accounts`
+
+Example demo accounts:
+
+| Role | Email | Password | Personality |
+|---|---|---|---|
+| Teacher | `teacher@demo.com` | `123456` | None |
+| Student | `cpt208@demo.com` | `cpt208` | Extroverted | 
+| Student | `bob@demo.com` | `123456` | Introverted |
+
+This is because the minimum discussion-group size is `2 students`.
+
+To demonstrate the full workflow successfully, please:
+- log in with one teacher and two student accounts at the same time
+- make sure student's personality in the same session is different (eg: contains one extroverted and one introverted -- for balanced participation)
+- use different browser windows, different browsers, or incognito windows if needed 
+- if error appears like "Request failed with status 401", please use incognito windows or clear localStorage (localStorage.clear()) in the browser Developer Tools. 
+- let both student accounts join the same session before the teacher starts grouping
+
+For step-by-step operating instructions, please also see [USER_GUIDE.md](USER_GUIDE.md).
+
 # OpenMind Discussion Platform
 
 An interactive web application for classroom group discussion, designed for the CPT208 Human-Centric Computing project.  
@@ -11,8 +36,6 @@ The system supports teacher-led discussion sessions, balanced group formation, r
 ## Source Repository
 
 - GitHub Repository: `https://github.com/Nancy-Nan1019/CPT208-B1-System`
-- Submission note: the repository should be public, or otherwise accessible to assessors, during the marking period.
-
 
 This project is a real interactive system rather than a static mock-up:
 - users can register and log in
@@ -20,20 +43,6 @@ This project is a real interactive system rather than a static mock-up:
 - students can join, participate, request AI guidance, review results, and rejoin active rooms
 - the UI updates through APIs and real-time WebSocket messages
 
-## Important Note for Assessors
-
-To use the discussion room correctly, the system requires at least:
-- `1 teacher account`
-- `2 student accounts`
-
-This is because the minimum discussion-group size is `2 students`.
-
-To demonstrate the full workflow successfully, please:
-- log in with one teacher and two student accounts at the same time
-- use different browser windows, different browsers, or incognito windows if needed
-- let both student accounts join the same session before the teacher starts grouping
-
-For step-by-step operating instructions, please also see [USER_GUIDE.md](USER_GUIDE.md).
 
 ## Recent Feature Additions
 
