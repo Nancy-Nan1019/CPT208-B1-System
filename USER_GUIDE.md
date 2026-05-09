@@ -22,13 +22,13 @@ Use:
 
 This helps keep the three accounts logged in at the same time.
 
-## Example Accounts
+Example demo accounts:
 
-| Role | Email | Password |
-|---|---|---|
-| Teacher | `teacher@demo.com` | `123456` |
-| Student | `alice@demo.com` | `123456` |
-| Student | `bob@demo.com` | `123456` |
+| Role | Email | Password | Personality |
+|---|---|---|---|
+| Teacher | `teacher@demo.com` | `123456` | None |
+| Student | `cpt208@demo.com` | `cpt208` | Extroverted |
+| Student | `bob@demo.com` | `123456` | Introverted |
 
 ## Quick Demo Workflow
 
